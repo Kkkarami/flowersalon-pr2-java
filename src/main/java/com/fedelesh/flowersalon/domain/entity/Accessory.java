@@ -43,11 +43,11 @@ public class Accessory {
         this.name = name;
     }
 
-    public AccessoryType getType() {
+    public AccessoryType getAccessoryType() {
         return accessoryType;
     }
 
-    public void setType(AccessoryType accessoryType) {
+    public void setAccessoryType(AccessoryType accessoryType) {
         this.accessoryType = accessoryType;
     }
 
