@@ -64,10 +64,10 @@ CREATE TABLE Orders (
 -- НФ: 3NF
 -- Тип: слабка сутність (M:N)
 CREATE TABLE Bouquet_Items (
+                               bouquet_item_id CHAR(36) PRIMARY KEY,
                                bouquet_id CHAR(36),
                                flower_id CHAR(36),
                                quantity INT NOT NULL,
-                               PRIMARY KEY (bouquet_id, flower_id),
                                FOREIGN KEY (bouquet_id) REFERENCES Bouquets(bouquet_id),
                                FOREIGN KEY (flower_id) REFERENCES Flowers(flower_id)
 );
@@ -75,17 +75,17 @@ CREATE TABLE Bouquet_Items (
 -- НФ: 3NF
 -- Тип: слабка сутність (M:N)
 CREATE TABLE Bouquet_Accessories (
+                                     bouquet_accessory_id CHAR(36) PRIMARY KEY,
                                      bouquet_id CHAR(36),
                                      accessory_id CHAR(36),
                                      quantity INT NOT NULL,
-                                     PRIMARY KEY (bouquet_id, accessory_id),
                                      FOREIGN KEY (bouquet_id) REFERENCES Bouquets(bouquet_id),
                                      FOREIGN KEY (accessory_id) REFERENCES Accessories(accessory_id)
 );
 
 -- НФ: 3NF
 -- Тип: слабка сутність (поліморфний зв’язок)
-CREATE TABLE OrderItems (
+CREATE TABLE Order_Items (
                             order_item_id CHAR(36) PRIMARY KEY,
                             order_id CHAR(36) NOT NULL,
                             item_type VARCHAR(20) NOT NULL,

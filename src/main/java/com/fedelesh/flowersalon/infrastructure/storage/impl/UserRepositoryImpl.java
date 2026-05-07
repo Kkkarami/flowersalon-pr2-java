@@ -3,13 +3,16 @@ package com.fedelesh.flowersalon.infrastructure.storage.impl;
 import com.fedelesh.flowersalon.domain.entity.User;
 import com.fedelesh.flowersalon.domain.enums.Role;
 import com.fedelesh.flowersalon.infrastructure.storage.BaseRepository;
+import com.fedelesh.flowersalon.infrastructure.storage.contract.UserRepository;
+import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
+import java.util.Optional;
 import java.util.UUID;
 
-public class UserRepositoryImpl extends BaseRepository<User> {
+public class UserRepositoryImpl extends BaseRepository<User> implements UserRepository {
 
     @Override
     protected String tableName() {
@@ -70,5 +73,29 @@ public class UserRepositoryImpl extends BaseRepository<User> {
     @Override
     protected String updateSql() {
         return "UPDATE Users SET first_name=?, last_name=?, email=?, phone=?, role=? WHERE user_id=?";
+    }
+
+    @Override
+    public Optional<User> findByEmail(String email) {
+
+        String sql = "SELECT * FROM Users WHERE email = ?";
+
+        try (Connection conn = pool.getConnection();
+              PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setString(1, email);
+
+            try (ResultSet rs = stmt.executeQuery()) {
+
+                if (rs.next()) {
+                    return Optional.of(map(rs));
+                }
+            }
+
+        } catch (SQLException e) {
+            throw new RuntimeException("Помилка при пошуку користувача по email", e);
+        }
+
+        return Optional.empty();
     }
 }

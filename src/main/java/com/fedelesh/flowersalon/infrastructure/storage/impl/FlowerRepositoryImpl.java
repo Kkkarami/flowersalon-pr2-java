@@ -2,12 +2,16 @@ package com.fedelesh.flowersalon.infrastructure.storage.impl;
 
 import com.fedelesh.flowersalon.domain.entity.Flower;
 import com.fedelesh.flowersalon.infrastructure.storage.BaseRepository;
+import com.fedelesh.flowersalon.infrastructure.storage.contract.FlowerRepository;
+import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
-public class FlowerRepositoryImpl extends BaseRepository<Flower> {
+public class FlowerRepositoryImpl extends BaseRepository<Flower> implements FlowerRepository {
 
     @Override
     protected String tableName() {
@@ -64,5 +68,31 @@ public class FlowerRepositoryImpl extends BaseRepository<Flower> {
     @Override
     protected String updateSql() {
         return "UPDATE Flowers SET name=?, color=?, price=?, stock_quantity=? WHERE flower_id=?";
+    }
+
+    @Override
+    public List<Flower> findByColor(String color) {
+
+        List<Flower> flowers = new ArrayList<>();
+
+        String sql = "SELECT * FROM Flowers WHERE color = ?";
+
+        try (Connection conn = pool.getConnection();
+              PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setString(1, color);
+
+            try (ResultSet rs = stmt.executeQuery()) {
+
+                while (rs.next()) {
+                    flowers.add(map(rs));
+                }
+            }
+
+        } catch (SQLException e) {
+            throw new RuntimeException("Помилка при пошуку квітів по кольору", e);
+        }
+
+        return flowers;
     }
 }

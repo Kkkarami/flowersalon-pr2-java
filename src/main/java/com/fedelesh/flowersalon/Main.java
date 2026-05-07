@@ -4,7 +4,7 @@ import com.fedelesh.flowersalon.infrastructure.storage.util.DatabaseInitializer;
 
 public class Main {
 
-    static void main(String[] args) {
+    public static void main(String[] args) {
 
         DatabaseInitializer.init();
 

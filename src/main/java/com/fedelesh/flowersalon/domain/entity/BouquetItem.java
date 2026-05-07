@@ -4,6 +4,7 @@ import java.util.UUID;
 
 public class BouquetItem {
 
+    private UUID bouquetItemId;
     private UUID bouquetId;
     private UUID flowerId;
     private int quantity;
@@ -11,10 +12,19 @@ public class BouquetItem {
     public BouquetItem() {
     }
 
-    public BouquetItem(UUID bouquetId, UUID flowerId, int quantity) {
+    public BouquetItem(UUID bouquetItemId, UUID bouquetId, UUID flowerId, int quantity) {
+        this.bouquetItemId = bouquetItemId;
         this.bouquetId = bouquetId;
         this.flowerId = flowerId;
         this.quantity = quantity;
+    }
+
+    public UUID getBouquetItemId() {
+        return bouquetItemId;
+    }
+
+    public void setBouquetItemId(UUID bouquetItemId) {
+        this.bouquetItemId = bouquetItemId;
     }
 
     public UUID getBouquetId() {

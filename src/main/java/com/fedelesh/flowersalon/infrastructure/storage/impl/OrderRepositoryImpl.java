@@ -2,13 +2,17 @@ package com.fedelesh.flowersalon.infrastructure.storage.impl;
 
 import com.fedelesh.flowersalon.domain.entity.Order;
 import com.fedelesh.flowersalon.infrastructure.storage.BaseRepository;
+import com.fedelesh.flowersalon.infrastructure.storage.contract.OrderRepository;
+import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
-public class OrderRepositoryImpl extends BaseRepository<Order> {
+public class OrderRepositoryImpl extends BaseRepository<Order> implements OrderRepository {
 
     @Override
     protected String tableName() {
@@ -72,5 +76,31 @@ public class OrderRepositoryImpl extends BaseRepository<Order> {
     @Override
     protected String updateSql() {
         return "UPDATE Orders SET customer_first_name=?, customer_last_name=?, phone=?, budget=?, style=?, preferred_color=? WHERE order_id=?";
+    }
+
+    @Override
+    public List<Order> findByUserId(UUID userId) {
+
+        List<Order> orders = new ArrayList<>();
+
+        String sql = "SELECT * FROM Orders WHERE user_id = ?";
+
+        try (Connection conn = pool.getConnection();
+              PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setString(1, userId.toString());
+
+            try (ResultSet rs = stmt.executeQuery()) {
+
+                while (rs.next()) {
+                    orders.add(map(rs));
+                }
+            }
+
+        } catch (SQLException e) {
+            throw new RuntimeException("Помилка при пошуку замовлень користувача", e);
+        }
+
+        return orders;
     }
 }

@@ -3,12 +3,14 @@ package com.fedelesh.flowersalon.infrastructure.storage.impl;
 import com.fedelesh.flowersalon.domain.entity.Accessory;
 import com.fedelesh.flowersalon.domain.enums.AccessoryType;
 import com.fedelesh.flowersalon.infrastructure.storage.BaseRepository;
+import com.fedelesh.flowersalon.infrastructure.storage.contract.AccessoryRepository;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.UUID;
 
-public class AccessoryRepositoryImpl extends BaseRepository<Accessory> {
+public class AccessoryRepositoryImpl extends BaseRepository<Accessory> implements
+      AccessoryRepository {
 
     @Override
     protected String tableName() {

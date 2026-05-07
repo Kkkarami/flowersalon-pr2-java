@@ -2,13 +2,14 @@ package com.fedelesh.flowersalon.infrastructure.storage.impl;
 
 import com.fedelesh.flowersalon.domain.entity.Bouquet;
 import com.fedelesh.flowersalon.infrastructure.storage.BaseRepository;
+import com.fedelesh.flowersalon.infrastructure.storage.contract.BouquetRepository;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.UUID;
 
-public class BouquetRepositoryImpl extends BaseRepository<Bouquet> {
+public class BouquetRepositoryImpl extends BaseRepository<Bouquet> implements BouquetRepository {
 
     @Override
     protected String tableName() {
