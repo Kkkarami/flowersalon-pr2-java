@@ -10,6 +10,16 @@
         <groupId>org.apache.maven.plugins</groupId>
         <version>3.2.5</version>
       </plugin>
+      <plugin>
+        <artifactId>javafx-maven-plugin</artifactId>
+        <configuration>
+          <mainClass>
+            com.fedelesh.flowersalon.presentation.MainApplication
+          </mainClass>
+        </configuration>
+        <groupId>org.openjfx</groupId>
+        <version>0.0.8</version>
+      </plugin>
     </plugins>
   </build>
   <dependencies>
@@ -24,6 +34,37 @@
       <scope>test</scope>
       <version>5.10.2</version>
     </dependency>
+    <dependency>
+      <artifactId>flyway-core</artifactId>
+      <groupId>org.flywaydb</groupId>
+      <version>11.8.0</version>
+    </dependency>
+    <dependency>
+      <artifactId>jbcrypt</artifactId>
+      <groupId>org.mindrot</groupId>
+      <version>0.4</version>
+    </dependency>
+    <dependency>
+      <artifactId>jakarta.mail</artifactId>
+      <groupId>com.sun.mail</groupId>
+      <version>2.0.1</version>
+    </dependency>
+    <dependency>
+      <artifactId>javafx-controls</artifactId>
+      <groupId>org.openjfx</groupId>
+      <version>21.0.2</version>
+    </dependency>
+    <dependency>
+      <artifactId>javafx-fxml</artifactId>
+      <groupId>org.openjfx</groupId>
+      <version>21.0.2</version>
+    </dependency>
+    <dependency>
+      <artifactId>guice</artifactId>
+      <groupId>com.google.inject</groupId>
+      <version>7.0.0</version>
+    </dependency>
+
   </dependencies>
 
   <groupId>com.fedelesh</groupId>

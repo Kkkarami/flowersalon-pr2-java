@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.ToolBar?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.VBox?>
+<BorderPane xmlns:fx="http://javafx.com/fxml/1"
+  xmlns="http://javafx.com/javafx/21"
+  fx:controller="com.fedelesh.flowersalon.presentation.controller.MainController"
+  fx:id="mainContainer">
+
+  <center>
+
+    <VBox spacing="10">
+
+      <Button managed="false"
+        text="Створити замовлення"
+        visible="false"
+        fx:id="createOrderButton"/>
+
+      <TableView VBox.vgrow="ALWAYS"
+        fx:id="mainTableView"/>
+
+      <padding>
+        <Insets bottom="15"
+          left="15"
+          right="15"
+          top="15"/>
+      </padding>
+
+    </VBox>
+
+  </center>
+
+  <top>
+    <ToolBar>
+
+      <Button onAction="#showFlowers"
+        text="Flowers"/>
+
+      <Button onAction="#showBouquets"
+        text="Bouquets"/>
+
+      <Button onAction="#showAccessories"
+        text="Accessories"/>
+
+      <Button onAction="#showUsers"
+        text="Users"/>
+
+      <Button onAction="#showOrders"
+        text="Orders"/>
+
+      <Button onAction="#handleLogout"
+        text="Logout"/>
+
+      <Pane HBox.hgrow="ALWAYS"/>
+
+    </ToolBar>
+  </top>
+
+</BorderPane>

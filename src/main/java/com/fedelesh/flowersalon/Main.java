@@ -1,6 +1,6 @@
 package com.fedelesh.flowersalon;
 
-import com.fedelesh.flowersalon.infrastructure.storage.util.DatabaseInitializer;
+import com.fedelesh.flowersalon.infrastructure.persistence.util.DatabaseInitializer;
 
 public class Main {
 
