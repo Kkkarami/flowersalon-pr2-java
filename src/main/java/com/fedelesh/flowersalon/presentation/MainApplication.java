@@ -9,9 +9,11 @@ import com.fedelesh.flowersalon.infrastructure.email.EmailSender;
 import com.fedelesh.flowersalon.infrastructure.email.SmtpEmailSender;
 import com.fedelesh.flowersalon.infrastructure.persistence.contract.UserRepository;
 import com.fedelesh.flowersalon.infrastructure.persistence.impl.UserRepositoryImpl;
+import com.fedelesh.flowersalon.infrastructure.persistence.util.DatabaseInitializer;
 import com.fedelesh.flowersalon.infrastructure.security.BcryptPasswordHasher;
 import com.fedelesh.flowersalon.infrastructure.security.PasswordHasher;
 import com.fedelesh.flowersalon.presentation.controller.LoginController;
+import com.fedelesh.flowersalon.presentation.navigation.SceneManager;
 import com.fedelesh.flowersalon.presentation.viewmodel.LoginViewModel;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -21,35 +23,42 @@ import javafx.stage.Stage;
 
 public class MainApplication extends Application {
 
-  private AuthService authService;
-  private SignUpService signUpService;
+    public static SceneManager sceneManager;
 
-  public static void main(String[] args) {
-    launch();
-  }
+    public static AuthService authService;
 
-  @Override
-  public void start(Stage stage) throws Exception {
+    public static SignUpService signUpService;
 
-    Application.setUserAgentStylesheet(new NordLight().getUserAgentStylesheet());
-    UserRepository userRepository = new UserRepositoryImpl();
-    PasswordHasher passwordHasher = new BcryptPasswordHasher();
-    EmailSender emailSender = new SmtpEmailSender();
+    public static void main(String[] args) {
+        DatabaseInitializer.init();
+        launch();
+    }
 
-    authService = new AuthServiceImpl(userRepository, passwordHasher);
-    signUpService = new SignUpServiceImpl(userRepository, passwordHasher, emailSender);
+    @Override
+    public void start(Stage stage) throws Exception {
 
-    FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/login-view.fxml"));
+        Application.setUserAgentStylesheet(new NordLight().getUserAgentStylesheet());
 
-    Parent root = loader.load();
+        sceneManager = new SceneManager(stage);
 
-    LoginController controller = loader.getController();
-    controller.setStage(stage);
-    controller.setViewModel(new LoginViewModel(authService));
-    controller.setSignUpService(signUpService);
+        UserRepository userRepository = new UserRepositoryImpl();
+        PasswordHasher passwordHasher = new BcryptPasswordHasher();
+        EmailSender emailSender = new SmtpEmailSender();
 
-    stage.setScene(new Scene(root));
-    stage.setTitle("Login");
-    stage.show();
-  }
+        authService = new AuthServiceImpl(userRepository, passwordHasher);
+        signUpService = new SignUpServiceImpl(userRepository, passwordHasher, emailSender);
+
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/login-view.fxml"));
+
+        Parent root = loader.load();
+
+        LoginController controller = loader.getController();
+        controller.setViewModel(new LoginViewModel(authService));
+
+        stage.setScene(new Scene(root));
+        stage.setTitle("Login");
+        stage.show();
+
+        stage.setMaximized(true);
+    }
 }

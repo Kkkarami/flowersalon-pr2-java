@@ -13,12 +13,13 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.text.Font?>
-<StackPane xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/25"
+<StackPane xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/21"
   fx:controller="com.fedelesh.flowersalon.presentation.controller.SignUpController">
 
   <GridPane alignment="CENTER" hgap="10" maxWidth="500" vgap="4">
 
-    <Button GridPane.columnSpan="2" GridPane.rowIndex="17" onAction="#onRegisterClick" prefHeight="25.0"
+    <Button GridPane.columnSpan="2" GridPane.rowIndex="17" onAction="#onRegisterClick"
+      prefHeight="25.0"
       prefWidth="423.0" text="Зареєструватися"/>
 
     <HBox GridPane.columnSpan="2" GridPane.rowIndex="14" alignment="CENTER" spacing="10">
@@ -31,7 +32,8 @@
       <TextField prefWidth="200" promptText="6-ти значиний код" fx:id="codeField"/>
     </HBox>
 
-    <Hyperlink GridPane.columnSpan="2" GridPane.rowIndex="18" alignment="CENTER" onAction="#onBackToLoginClick"
+    <Hyperlink GridPane.columnSpan="2" GridPane.rowIndex="18" alignment="CENTER"
+      onAction="#onBackToLoginClick"
       prefHeight="23.0" prefWidth="422.0" text="Вже є акаунт? Увійти"/>
 
     <Label GridPane.columnSpan="2" GridPane.halignment="CENTER" GridPane.rowIndex="0"

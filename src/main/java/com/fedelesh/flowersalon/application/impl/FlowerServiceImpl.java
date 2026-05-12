@@ -8,22 +8,20 @@ import java.util.UUID;
 
 public class FlowerServiceImpl implements FlowerService {
 
-  private final FlowerRepository flowerRepository;
+    private final FlowerRepository flowerRepository;
 
-  public FlowerServiceImpl(FlowerRepository flowerRepository) {
-    this.flowerRepository = flowerRepository;
-  }
+    public FlowerServiceImpl(FlowerRepository flowerRepository) {
+        this.flowerRepository = flowerRepository;
+    }
 
-  @Override
-  public List<Flower> getAll() {
-    return flowerRepository.findAll();
-  }
+    @Override
+    public List<Flower> getAll() {
+        return flowerRepository.findAll();
+    }
 
-  @Override
-  public Flower getById(UUID id) {
+    @Override
+    public Flower getById(UUID id) {
 
-    return flowerRepository
-        .findById(id)
-        .orElseThrow(() -> new RuntimeException("Flower not found"));
-  }
+        return flowerRepository.findById(id).orElseThrow(() -> new RuntimeException("Flower not found"));
+    }
 }

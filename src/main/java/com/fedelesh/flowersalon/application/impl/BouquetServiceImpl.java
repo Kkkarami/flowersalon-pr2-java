@@ -8,22 +8,20 @@ import java.util.UUID;
 
 public class BouquetServiceImpl implements BouquetService {
 
-  private final BouquetRepository bouquetRepository;
+    private final BouquetRepository bouquetRepository;
 
-  public BouquetServiceImpl(BouquetRepository bouquetRepository) {
-    this.bouquetRepository = bouquetRepository;
-  }
+    public BouquetServiceImpl(BouquetRepository bouquetRepository) {
+        this.bouquetRepository = bouquetRepository;
+    }
 
-  @Override
-  public List<Bouquet> getAll() {
-    return bouquetRepository.findAll();
-  }
+    @Override
+    public List<Bouquet> getAll() {
+        return bouquetRepository.findAll();
+    }
 
-  @Override
-  public Bouquet getById(UUID id) {
+    @Override
+    public Bouquet getById(UUID id) {
 
-    return bouquetRepository
-        .findById(id)
-        .orElseThrow(() -> new RuntimeException("Bouquet not found"));
-  }
+        return bouquetRepository.findById(id).orElseThrow(() -> new RuntimeException("Bouquet not found"));
+    }
 }

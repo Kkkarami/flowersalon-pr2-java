@@ -6,7 +6,7 @@ import java.util.UUID;
 
 public interface BouquetService {
 
-  List<Bouquet> getAll();
+    List<Bouquet> getAll();
 
-  Bouquet getById(UUID id);
+    Bouquet getById(UUID id);
 }

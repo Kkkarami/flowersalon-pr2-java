@@ -6,13 +6,13 @@ import java.util.UUID;
 
 public interface Repository<T> {
 
-  void save(T entity);
+    void save(T entity);
 
-  Optional<T> findById(UUID id);
+    Optional<T> findById(UUID id);
 
-  List<T> findAll();
+    List<T> findAll();
 
-  void update(T entity);
+    void update(T entity);
 
-  void deleteById(UUID id);
+    void deleteById(UUID id);
 }

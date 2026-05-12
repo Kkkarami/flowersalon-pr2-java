@@ -6,7 +6,7 @@ import java.util.UUID;
 
 public interface AccessoryService {
 
-  List<Accessory> getAll();
+    List<Accessory> getAll();
 
-  Accessory getById(UUID id);
+    Accessory getById(UUID id);
 }

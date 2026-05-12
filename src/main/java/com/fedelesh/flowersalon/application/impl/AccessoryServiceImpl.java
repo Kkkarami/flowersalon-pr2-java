@@ -8,22 +8,20 @@ import java.util.UUID;
 
 public class AccessoryServiceImpl implements AccessoryService {
 
-  private final AccessoryRepository accessoryRepository;
+    private final AccessoryRepository accessoryRepository;
 
-  public AccessoryServiceImpl(AccessoryRepository accessoryRepository) {
-    this.accessoryRepository = accessoryRepository;
-  }
+    public AccessoryServiceImpl(AccessoryRepository accessoryRepository) {
+        this.accessoryRepository = accessoryRepository;
+    }
 
-  @Override
-  public List<Accessory> getAll() {
-    return accessoryRepository.findAll();
-  }
+    @Override
+    public List<Accessory> getAll() {
+        return accessoryRepository.findAll();
+    }
 
-  @Override
-  public Accessory getById(UUID id) {
+    @Override
+    public Accessory getById(UUID id) {
 
-    return accessoryRepository
-        .findById(id)
-        .orElseThrow(() -> new RuntimeException("Accessory not found"));
-  }
+        return accessoryRepository.findById(id).orElseThrow(() -> new RuntimeException("Accessory not found"));
+    }
 }

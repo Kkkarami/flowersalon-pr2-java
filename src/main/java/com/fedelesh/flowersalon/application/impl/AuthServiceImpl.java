@@ -9,47 +9,46 @@ import com.fedelesh.flowersalon.infrastructure.security.PasswordHasher;
 
 public class AuthServiceImpl implements AuthService {
 
-  private final UserRepository userRepository;
-  private final PasswordHasher passwordHasher;
+    private final UserRepository userRepository;
+    private final PasswordHasher passwordHasher;
 
-  private User currentUser;
+    private User currentUser;
 
-  public AuthServiceImpl(UserRepository userRepository, PasswordHasher passwordHasher) {
-    this.userRepository = userRepository;
-    this.passwordHasher = passwordHasher;
-  }
-
-  @Override
-  public boolean authenticate(String email, String password) {
-
-    new ValidationHelper()
-        .notEmpty("email", email)
-        .validEmail("email", email)
-        .notEmpty("password", password)
-        .throwIfHasErrors();
-
-    User user =
-        userRepository
-            .findByEmail(email)
-            .orElseThrow(() -> new AuthenticationException("Неправильний логін або пароль"));
-
-    boolean valid = passwordHasher.verify(password, user.getPasswordHash());
-
-    if (!valid) {
-      throw new AuthenticationException("Неправильний логін або пароль");
+    public AuthServiceImpl(UserRepository userRepository, PasswordHasher passwordHasher) {
+        this.userRepository = userRepository;
+        this.passwordHasher = passwordHasher;
     }
 
-    currentUser = user;
-    return true;
-  }
+    @Override
+    public boolean authenticate(String email, String password) {
 
-  @Override
-  public User getCurrentUser() {
-    return currentUser;
-  }
+        new ValidationHelper()
+                .notEmpty("email", email)
+                .validEmail("email", email)
+                .notEmpty("password", password)
+                .throwIfHasErrors();
 
-  @Override
-  public void logout() {
-    currentUser = null;
-  }
+        User user = userRepository
+                .findByEmail(email)
+                .orElseThrow(() -> new AuthenticationException("Неправильний логін або пароль"));
+
+        boolean valid = passwordHasher.verify(password, user.getPasswordHash());
+
+        if (!valid) {
+            throw new AuthenticationException("Неправильний логін або пароль");
+        }
+
+        currentUser = user;
+        return true;
+    }
+
+    @Override
+    public User getCurrentUser() {
+        return currentUser;
+    }
+
+    @Override
+    public void logout() {
+        currentUser = null;
+    }
 }

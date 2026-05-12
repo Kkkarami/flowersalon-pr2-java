@@ -11,29 +11,28 @@ import org.junit.jupiter.api.Test;
 
 class OrderRepositoryTest {
 
-  private final OrderRepositoryImpl repository = new OrderRepositoryImpl();
+    private final OrderRepositoryImpl repository = new OrderRepositoryImpl();
 
-  @Test
-  void shouldFindByUserId() {
+    @Test
+    void shouldFindByUserId() {
 
-    UUID userId = UUID.fromString("c8a91f44-2d6b-4f91-8a3c-1f9e7b2d5a11");
+        UUID userId = UUID.fromString("c8a91f44-2d6b-4f91-8a3c-1f9e7b2d5a11");
 
-    Order order =
-        new Order(
-            UUID.randomUUID(),
-            userId,
-            "Name",
-            "Surname",
-            "+380000000000",
-            BigDecimal.valueOf(500),
-            "romantic",
-            "red",
-            LocalDateTime.now());
+        Order order = new Order(
+                UUID.randomUUID(),
+                userId,
+                "Name",
+                "Surname",
+                "+380000000000",
+                BigDecimal.valueOf(500),
+                "romantic",
+                "red",
+                LocalDateTime.now());
 
-    repository.save(order);
+        repository.save(order);
 
-    List<Order> result = repository.findByUserId(userId);
+        List<Order> result = repository.findByUserId(userId);
 
-    assertFalse(result.isEmpty());
-  }
+        assertFalse(result.isEmpty());
+    }
 }
