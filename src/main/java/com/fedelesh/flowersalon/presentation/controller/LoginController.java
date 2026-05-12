@@ -1,5 +1,6 @@
 package com.fedelesh.flowersalon.presentation.controller;
 
+import com.fedelesh.flowersalon.application.contract.AuthService;
 import com.fedelesh.flowersalon.application.contract.SignUpService;
 import com.fedelesh.flowersalon.presentation.viewmodel.LoginViewModel;
 import javafx.fxml.FXML;
@@ -11,6 +12,9 @@ import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
 public class LoginController {
+
+    public static AuthService authService;
+
 
     @FXML
     private TextField emailField;
@@ -27,6 +31,7 @@ public class LoginController {
 
     public void setViewModel(LoginViewModel viewModel) {
         this.viewModel = viewModel;
+        authService = viewModel.authService();
     }
 
     public void setStage(Stage stage) {

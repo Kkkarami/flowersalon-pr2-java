@@ -60,7 +60,6 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public void delete(UUID id) {
-        // спочатку видаляємо items
         List<OrderItem> items = orderItemRepository.findByOrderId(id);
 
         for (OrderItem item : items) {
@@ -82,4 +81,11 @@ public class OrderServiceImpl implements OrderService {
 
         return total;
     }
+    
+    @Override
+    public void update(Order order) {
+
+        orderRepository.update(order);
+    }
+
 }

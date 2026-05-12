@@ -26,12 +26,12 @@ public class OrderItemRepositoryImpl extends BaseRepository<OrderItem> implement
 
     @Override
     protected String insertSql() {
-        return "INSERT INTO order_items (order_item_id, order_id, item_type, flower_id, bouquet_id, quantity, price_snapshot) VALUES (?, ?, ?, ?, ?, ?, ?)";
+        return "INSERT INTO order_items (order_item_id, order_id, item_type, flower_id, bouquet_id, accessory_id, quantity, price_snapshot) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
     }
 
     @Override
     protected String updateSql() {
-        return "UPDATE order_items SET item_type=?, flower_id=?, bouquet_id=?, quantity=?, price_snapshot=? WHERE order_item_id=?";
+        return "UPDATE order_items SET item_type=?, flower_id=?, bouquet_id=?, accessory_id=?, quantity=?, price_snapshot=? WHERE order_item_id=?";
     }
 
     @Override
@@ -42,6 +42,9 @@ public class OrderItemRepositoryImpl extends BaseRepository<OrderItem> implement
               rs.getString("item_type"),
               rs.getString("flower_id") != null ? UUID.fromString(rs.getString("flower_id")) : null,
               rs.getString("bouquet_id") != null ? UUID.fromString(rs.getString("bouquet_id"))
+                    : null,
+              rs.getString("accessory_id") != null
+                    ? UUID.fromString(rs.getString("accessory_id"))
                     : null,
               rs.getInt("quantity"),
               rs.getBigDecimal("price_snapshot")
@@ -55,8 +58,9 @@ public class OrderItemRepositoryImpl extends BaseRepository<OrderItem> implement
         stmt.setString(3, o.getItemType());
         stmt.setString(4, o.getFlowerId() != null ? o.getFlowerId().toString() : null);
         stmt.setString(5, o.getBouquetId() != null ? o.getBouquetId().toString() : null);
-        stmt.setInt(6, o.getQuantity());
-        stmt.setBigDecimal(7, o.getPriceSnapshot());
+        stmt.setString(6, o.getAccessoryId() != null ? o.getAccessoryId().toString() : null);
+        stmt.setInt(7, o.getQuantity());
+        stmt.setBigDecimal(8, o.getPriceSnapshot());
     }
 
     @Override
@@ -64,9 +68,10 @@ public class OrderItemRepositoryImpl extends BaseRepository<OrderItem> implement
         stmt.setString(1, o.getItemType());
         stmt.setString(2, o.getFlowerId() != null ? o.getFlowerId().toString() : null);
         stmt.setString(3, o.getBouquetId() != null ? o.getBouquetId().toString() : null);
-        stmt.setInt(4, o.getQuantity());
-        stmt.setBigDecimal(5, o.getPriceSnapshot());
-        stmt.setString(6, o.getOrderItemId().toString());
+        stmt.setString(4, o.getAccessoryId() != null ? o.getAccessoryId().toString() : null);
+        stmt.setInt(5, o.getQuantity());
+        stmt.setBigDecimal(6, o.getPriceSnapshot());
+        stmt.setString(7, o.getOrderItemId().toString());
     }
 
     @Override

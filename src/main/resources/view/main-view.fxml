@@ -17,10 +17,30 @@
 
     <VBox spacing="10">
 
-      <Button managed="false"
-        text="Створити замовлення"
-        visible="false"
-        fx:id="createOrderButton"/>
+      <HBox alignment="CENTER_RIGHT"
+        spacing="10">
+
+        <Button managed="false"
+          onAction="#openCreateOrderWindow"
+          text="Create Order"
+          visible="false"
+          fx:id="createOrderButton"/>
+
+        <Button managed="false"
+          onAction="#handleEditOrder"
+          text="Edit Order"
+          visible="false"
+          fx:id="editOrderButton"/>
+
+        <Button managed="false"
+          onAction="#handleDeleteOrder"
+          text="Delete Order"
+          visible="false"
+          fx:id="deleteOrderButton"/>
+
+        <Pane HBox.hgrow="ALWAYS"/>
+
+      </HBox>
 
       <TableView VBox.vgrow="ALWAYS"
         fx:id="mainTableView"/>
@@ -37,6 +57,7 @@
   </center>
 
   <top>
+
     <ToolBar>
 
       <Button onAction="#showFlowers"
@@ -60,6 +81,7 @@
       <Pane HBox.hgrow="ALWAYS"/>
 
     </ToolBar>
+
   </top>
 
 </BorderPane>

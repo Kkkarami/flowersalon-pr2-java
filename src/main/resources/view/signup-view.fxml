@@ -1,61 +1,126 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Hyperlink?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.PasswordField?>
 <?import javafx.scene.control.ProgressIndicator?>
 <?import javafx.scene.control.TextField?>
-<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.text.Font?>
+<StackPane xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/25"
+  fx:controller="com.fedelesh.flowersalon.presentation.controller.SignUpController">
 
-<StackPane prefHeight="550.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.fedelesh.flowersalon.presentation.controller.SignUpController">
-  <children>
-    <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="550.0" prefWidth="600.0">
-      <children>
-        <Button fx:id="sendCodeButton" layoutX="322.0" layoutY="355.0" onAction="#onSendCodeClick" text="Отримати код" />
+  <GridPane alignment="CENTER" hgap="10" maxWidth="500" vgap="4">
 
-        <Button layoutX="80.0" layoutY="430.0" onAction="#onRegisterClick" prefWidth="440.0" text="Зареєструватися" />
+    <Button GridPane.columnSpan="2" GridPane.rowIndex="17" onAction="#onRegisterClick" prefHeight="25.0"
+      prefWidth="423.0" text="Зареєструватися"/>
 
-        <Hyperlink layoutX="239.0" layoutY="486.0" onAction="#onBackToLoginClick" text="Вже є акаунт? Увійти" />
+    <HBox GridPane.columnSpan="2" GridPane.rowIndex="14" alignment="CENTER" spacing="10">
 
-        <Label layoutX="232.0" layoutY="26.0" text="Реєстрація">
-          <font>
-            <Font size="28.0" />
-          </font>
-        </Label>
+      <Button alignment="CENTER" onAction="#onSendCodeClick" prefHeight="25.0"
+        prefWidth="142.0" text="Отримати код" fx:id="sendCodeButton"/>
 
-        <Label layoutX="80.0" layoutY="66.0" text="Ім'я" />
-        <Label fx:id="firstNameErrorLabel" layoutX="80.0" layoutY="111.0" textFill="RED" />
+      <ProgressIndicator prefHeight="25" prefWidth="25" visible="false" fx:id="progressIndicator"/>
 
-        <Label layoutX="320.0" layoutY="66.0" text="Прізвище" />
-        <Label fx:id="lastNameErrorLabel" layoutX="320.0" layoutY="111.0" textFill="RED" />
+      <TextField prefWidth="200" promptText="6-ти значиний код" fx:id="codeField"/>
+    </HBox>
 
-        <Label layoutX="80.0" layoutY="134.0" text="Email" />
-        <Label fx:id="emailErrorLabel" layoutX="80.0" layoutY="179.0" textFill="RED" />
+    <Hyperlink GridPane.columnSpan="2" GridPane.rowIndex="18" alignment="CENTER" onAction="#onBackToLoginClick"
+      prefHeight="23.0" prefWidth="422.0" text="Вже є акаунт? Увійти"/>
 
-        <Label layoutX="79.0" layoutY="200.0" text="Телефон" />
-        <Label fx:id="phoneErrorLabel" layoutX="80.0" layoutY="245.0" textFill="RED" />
+    <Label GridPane.columnSpan="2" GridPane.halignment="CENTER" GridPane.rowIndex="0"
+      text="Реєстрація">
+      <font>
+        <Font size="28.0"/>
+      </font>
+    </Label>
 
-        <Label layoutX="81.0" layoutY="266.0" text="Пароль" />
-        <Label fx:id="passwordErrorLabel" layoutX="81.0" layoutY="311.0" textFill="RED" />
+    <Label GridPane.columnIndex="0" GridPane.rowIndex="1" prefWidth="200" text="Ім'я"/>
 
-        <Label layoutX="80.0" layoutY="335.0" text="Код підтвердження" />
-        <Label fx:id="codeErrorLabel" layoutX="80.0" layoutY="380.0" textFill="RED" />
+    <Label GridPane.columnIndex="1" GridPane.rowIndex="1" prefWidth="200" text="Прізвище"/>
 
-        <Label fx:id="statusLabel" layoutX="81.0" layoutY="399.0" prefWidth="440.0" />
+    <Label GridPane.columnIndex="0" GridPane.rowIndex="3" prefWidth="200" textFill="RED"
+      fx:id="firstNameErrorLabel"/>
 
-        <PasswordField fx:id="passwordField" layoutX="81.0" layoutY="286.0" prefWidth="440.0" promptText="Password" />
+    <Label GridPane.columnIndex="1" GridPane.rowIndex="3" prefWidth="200" textFill="RED"
+      fx:id="lastNameErrorLabel"/>
 
-        <ProgressIndicator fx:id="progressIndicator" layoutX="437.0" layoutY="358.0" prefHeight="30.0" prefWidth="30.0" visible="false" />
+    <Label GridPane.columnSpan="2" GridPane.rowIndex="4" alignment="CENTER" text="Email"/>
 
-        <TextField fx:id="firstNameField" layoutX="80.0" layoutY="86.0" prefWidth="200.0" promptText="First Name" />
-        <TextField fx:id="lastNameField" layoutX="320.0" layoutY="86.0" prefWidth="200.0" promptText="Last Name" />
-        <TextField fx:id="emailField" layoutX="80.0" layoutY="154.0" prefWidth="440.0" promptText="example: mail@gmail.com" />
-        <TextField fx:id="phoneField" layoutX="80.0" layoutY="220.0" prefWidth="440.0" promptText="+380..." />
-        <TextField fx:id="codeField" layoutX="80.0" layoutY="355.0" prefWidth="230.0" />
-      </children>
-    </AnchorPane>
-  </children>
+    <Label GridPane.columnSpan="2" GridPane.rowIndex="6" textFill="RED" fx:id="emailErrorLabel"/>
+
+    <Label GridPane.columnSpan="2" GridPane.rowIndex="7" alignment="CENTER" text="Телефон"/>
+
+    <Label GridPane.columnSpan="2" GridPane.rowIndex="9" textFill="RED" fx:id="phoneErrorLabel"/>
+
+    <Label GridPane.columnSpan="2" GridPane.rowIndex="10" alignment="CENTER" text="Пароль"/>
+
+    <Label GridPane.columnSpan="2" GridPane.rowIndex="12" textFill="RED"
+      fx:id="passwordErrorLabel"/>
+
+    <Label GridPane.columnSpan="2" GridPane.rowIndex="13" alignment="CENTER_RIGHT" prefHeight="17.0"
+      prefWidth="144.0" text="Код підтвердження"/>
+
+    <Label GridPane.columnSpan="2"
+      GridPane.halignment="CENTER"
+      GridPane.rowIndex="15"
+      alignment="CENTER"
+      prefWidth="500"
+      textFill="RED"
+      fx:id="codeErrorLabel"/>
+
+    <Label GridPane.columnSpan="2" GridPane.rowIndex="16" alignment="CENTER" fx:id="statusLabel"/>
+
+    <PasswordField GridPane.columnSpan="2" GridPane.rowIndex="11" prefWidth="420"
+      promptText="Password" fx:id="passwordField"/>
+
+    <TextField GridPane.columnIndex="0" GridPane.rowIndex="2" prefWidth="200"
+      promptText="First Name" fx:id="firstNameField"/>
+
+    <TextField GridPane.columnIndex="1" GridPane.rowIndex="2" prefWidth="200" promptText="Last Name"
+      fx:id="lastNameField"/>
+
+    <TextField GridPane.columnSpan="2" GridPane.rowIndex="5" prefWidth="420"
+      promptText="example: mail@gmail.com" fx:id="emailField"/>
+
+    <TextField GridPane.columnSpan="2" GridPane.rowIndex="8" prefWidth="420" promptText="+380..."
+      fx:id="phoneField"/>
+
+    <columnConstraints>
+      <ColumnConstraints/>
+      <ColumnConstraints/>
+    </columnConstraints>
+    <padding>
+      <Insets bottom="20" left="20" right="20" top="20"/>
+    </padding>
+    <rowConstraints>
+      <RowConstraints/>
+      <RowConstraints/>
+      <RowConstraints/>
+      <RowConstraints/>
+      <RowConstraints/>
+      <RowConstraints/>
+      <RowConstraints/>
+      <RowConstraints/>
+      <RowConstraints/>
+      <RowConstraints/>
+      <RowConstraints/>
+      <RowConstraints/>
+      <RowConstraints/>
+      <RowConstraints/>
+      <RowConstraints/>
+      <RowConstraints/>
+      <RowConstraints/>
+      <RowConstraints/>
+      <RowConstraints/>
+    </rowConstraints>
+
+  </GridPane>
+
 </StackPane>

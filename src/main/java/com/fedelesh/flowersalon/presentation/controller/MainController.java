@@ -1,9 +1,21 @@
 package com.fedelesh.flowersalon.presentation.controller;
 
+import com.fedelesh.flowersalon.application.contract.AccessoryService;
+import com.fedelesh.flowersalon.application.contract.BouquetService;
+import com.fedelesh.flowersalon.application.contract.FlowerService;
 import com.fedelesh.flowersalon.application.contract.OrderService;
+import com.fedelesh.flowersalon.application.contract.UserService;
+import com.fedelesh.flowersalon.application.impl.AccessoryServiceImpl;
+import com.fedelesh.flowersalon.application.impl.BouquetServiceImpl;
+import com.fedelesh.flowersalon.application.impl.FlowerServiceImpl;
+import com.fedelesh.flowersalon.application.impl.OrderServiceImpl;
+import com.fedelesh.flowersalon.application.impl.UserServiceImpl;
+import com.fedelesh.flowersalon.domain.entity.Order;
 import com.fedelesh.flowersalon.infrastructure.persistence.impl.AccessoryRepositoryImpl;
 import com.fedelesh.flowersalon.infrastructure.persistence.impl.BouquetRepositoryImpl;
 import com.fedelesh.flowersalon.infrastructure.persistence.impl.FlowerRepositoryImpl;
+import com.fedelesh.flowersalon.infrastructure.persistence.impl.OrderItemRepositoryImpl;
+import com.fedelesh.flowersalon.infrastructure.persistence.impl.OrderRepositoryImpl;
 import com.fedelesh.flowersalon.infrastructure.persistence.impl.UserRepositoryImpl;
 import com.fedelesh.flowersalon.presentation.util.TableUtils;
 import javafx.application.Platform;
@@ -19,29 +31,58 @@ import javafx.stage.Stage;
 
 public class MainController {
 
-    private final UserRepositoryImpl userRepository =
-          new UserRepositoryImpl();
-    private final FlowerRepositoryImpl flowerRepository =
-          new FlowerRepositoryImpl();
-    private final BouquetRepositoryImpl bouquetRepository =
-          new BouquetRepositoryImpl();
-    private final AccessoryRepositoryImpl accessoryRepository =
-          new AccessoryRepositoryImpl();
-    private final OrderService orderService = null;
+    private final UserService userService =
+          new UserServiceImpl(
+                new UserRepositoryImpl()
+          );
+
+    private final FlowerService flowerService =
+          new FlowerServiceImpl(
+                new FlowerRepositoryImpl()
+          );
+
+    private final BouquetService bouquetService =
+          new BouquetServiceImpl(
+                new BouquetRepositoryImpl()
+          );
+
+    private final AccessoryService accessoryService =
+          new AccessoryServiceImpl(
+                new AccessoryRepositoryImpl()
+          );
+
+    private final OrderService orderService =
+          new OrderServiceImpl(
+                new OrderRepositoryImpl(),
+                new OrderItemRepositoryImpl()
+          );
+
     @FXML
     private TableView mainTableView;
+
     @FXML
     private Button createOrderButton;
+
+    @FXML
+    private Button editOrderButton;
+
+    @FXML
+    private Button deleteOrderButton;
+
 
     @FXML
     public void initialize() {
 
         createOrderButton.setVisible(false);
         createOrderButton.setManaged(false);
+        editOrderButton.setVisible(false);
+        editOrderButton.setManaged(false);
+        deleteOrderButton.setVisible(false);
+        deleteOrderButton.setManaged(false);
 
-        createOrderButton.setOnAction(e -> {
-            System.out.println("OPEN CREATE ORDER WINDOW");
-        });
+        createOrderButton.setOnAction(
+              e -> openCreateOrderWindow()
+        );
 
         Platform.runLater(this::showFlowers);
     }
@@ -49,9 +90,11 @@ public class MainController {
     private void resetTable() {
 
         mainTableView.getColumns().clear();
+
         mainTableView.getItems().clear();
 
         createOrderButton.setVisible(false);
+
         createOrderButton.setManaged(false);
     }
 
@@ -80,7 +123,7 @@ public class MainController {
 
         mainTableView.setItems(
               FXCollections.observableArrayList(
-                    flowerRepository.findAll()
+                    flowerService.getAll()
               )
         );
     }
@@ -99,7 +142,7 @@ public class MainController {
 
         mainTableView.setItems(
               FXCollections.observableArrayList(
-                    bouquetRepository.findAll()
+                    bouquetService.getAll()
               )
         );
     }
@@ -119,7 +162,7 @@ public class MainController {
 
         mainTableView.setItems(
               FXCollections.observableArrayList(
-                    accessoryRepository.findAll()
+                    accessoryService.getAll()
               )
         );
     }
@@ -138,18 +181,13 @@ public class MainController {
 
         mainTableView.setItems(
               FXCollections.observableArrayList(
-                    userRepository.findAll()
+                    userService.getAll()
               )
         );
     }
 
     @FXML
     public void showOrders() {
-
-        resetTable();
-
-        createOrderButton.setVisible(true);
-        createOrderButton.setManaged(true);
 
         setupTable(
 
@@ -163,15 +201,107 @@ public class MainController {
               TableUtils.column("Дата", "createdAt")
         );
 
-        if (orderService != null) {
+        createOrderButton.setVisible(true);
+        createOrderButton.setManaged(true);
+        editOrderButton.setVisible(true);
+        editOrderButton.setManaged(true);
+        deleteOrderButton.setVisible(true);
+        deleteOrderButton.setManaged(true);
 
-            mainTableView.setItems(
-                  FXCollections.observableArrayList(
-                        orderService.getAll()
-                  )
+        mainTableView.setItems(
+              FXCollections.observableArrayList(
+                    orderService.getAll()
+              )
+        );
+    }
+
+    @FXML
+    private void openCreateOrderWindow() {
+
+        try {
+
+            FXMLLoader loader = new FXMLLoader(
+                  getClass().getResource("/view/create-order-view.fxml")
             );
+
+            Parent root = loader.load();
+
+            Stage currentStage =
+                  (Stage) mainTableView.getScene().getWindow();
+
+            currentStage.getScene().setRoot(root);
+
+            currentStage.setTitle("Create Order");
+
+            currentStage.setMaximized(true);
+
+        } catch (Exception e) {
+
+            e.printStackTrace();
         }
     }
+
+    @FXML
+    private void handleEditOrder() {
+
+        Order selectedOrder =
+              (Order) mainTableView
+                    .getSelectionModel()
+                    .getSelectedItem();
+
+        if (selectedOrder == null) {
+            return;
+        }
+
+        try {
+
+            FXMLLoader loader = new FXMLLoader(
+                  getClass().getResource(
+                        "/view/create-order-view.fxml"
+                  )
+            );
+
+            Parent root = loader.load();
+
+            CreateOrderController controller =
+                  loader.getController();
+
+            controller.loadOrder(selectedOrder);
+
+            Stage currentStage =
+                  (Stage) mainTableView
+                        .getScene()
+                        .getWindow();
+
+            currentStage
+                  .getScene()
+                  .setRoot(root);
+
+        } catch (Exception e) {
+
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    private void handleDeleteOrder() {
+
+        Order selectedOrder =
+              (Order) mainTableView
+                    .getSelectionModel()
+                    .getSelectedItem();
+
+        if (selectedOrder == null) {
+            return;
+        }
+
+        orderService.delete(
+              selectedOrder.getOrderId()
+        );
+
+        showOrders();
+    }
+
 
     @FXML
     private void handleLogout() {

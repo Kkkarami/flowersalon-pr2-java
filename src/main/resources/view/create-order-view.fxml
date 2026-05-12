@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<BorderPane xmlns:fx="http://javafx.com/fxml/1"
+  xmlns="http://javafx.com/javafx/21"
+  fx:controller="com.fedelesh.flowersalon.presentation.controller.CreateOrderController">
+
+  <center>
+    <SplitPane dividerPositions="0.33, 0.75">
+      <items>
+        <VBox spacing="10">
+          <Button onAction="#handleBack"
+            text="Back"/>
+          <TabPane VBox.vgrow="ALWAYS">
+            <tabs>
+
+              <Tab text="Flowers">
+                <VBox spacing="10">
+                  <Button onAction="#handleAddFlower"
+                    text="Add Flower"/>
+                  <TableView VBox.vgrow="ALWAYS"
+                    fx:id="flowersTableView">
+                    <columns>
+                      <TableColumn text="Name"
+                        fx:id="flowerNameColumn"/>
+                      <TableColumn text="Color"
+                        fx:id="flowerColorColumn"/>
+                      <TableColumn text="Price"
+                        fx:id="flowerPriceColumn"/>
+                    </columns>
+                  </TableView>
+                </VBox>
+              </Tab>
+
+              <Tab text="Bouquets">
+                <VBox spacing="10">
+                  <Button onAction="#handleAddBouquet"
+                    text="Add Bouquet"/>
+                  <TableView VBox.vgrow="ALWAYS"
+                    fx:id="bouquetsTableView">
+                    <columns>
+                      <TableColumn text="Name"
+                        fx:id="bouquetNameColumn"/>
+                      <TableColumn text="Description"
+                        fx:id="bouquetDescriptionColumn"/>
+                    </columns>
+                  </TableView>
+                </VBox>
+              </Tab>
+
+              <Tab text="Accessories">
+                <VBox spacing="10">
+                  <Button onAction="#handleAddAccessory"
+                    text="Add Accessory"/>
+                  <TableView VBox.vgrow="ALWAYS"
+                    fx:id="accessoriesTableView">
+                    <columns>
+                      <TableColumn text="Name"
+                        fx:id="accessoryNameColumn"/>
+                      <TableColumn text="Type"
+                        fx:id="accessoryTypeColumn"/>
+                      <TableColumn text="Price"
+                        fx:id="accessoryPriceColumn"/>
+                    </columns>
+                  </TableView>
+                </VBox>
+              </Tab>
+            </tabs>
+          </TabPane>
+
+          <VBox spacing="8">
+            <Label text="Customer Info"/>
+            <TextField promptText="First Name"
+              fx:id="firstNameField"/>
+            <TextField promptText="Last Name"
+              fx:id="lastNameField"/>
+            <TextField promptText="Phone"
+              fx:id="phoneField"/>
+            <TextField promptText="Style"
+              fx:id="styleField"/>
+            <TextField promptText="Preferred Color"
+              fx:id="colorField"/>
+          </VBox>
+
+          <padding>
+            <Insets bottom="15"
+              left="15"
+              right="15"
+              top="15"/>
+          </padding>
+
+        </VBox>
+
+        <VBox spacing="10">
+
+          <HBox spacing="10">
+
+            <Button onAction="#handleRemoveItem"
+              text="Remove Selected"/>
+
+            <Button onAction="#handleCreateOrder"
+              text="Create Order"/>
+
+            <HBox HBox.hgrow="ALWAYS"/>
+
+            <Label fx:id="totalLabel"/>
+
+            <Label text="Total:"/>
+
+          </HBox>
+
+          <Label text="Current Order"/>
+
+          <TableView VBox.vgrow="ALWAYS"
+            fx:id="orderItemsTableView">
+
+            <columns>
+
+              <TableColumn text="Type"
+                fx:id="orderTypeColumn"/>
+
+              <TableColumn text="Name"
+                fx:id="orderNameColumn"/>
+
+              <TableColumn text="Qty"
+                fx:id="orderQuantityColumn"/>
+
+              <TableColumn text="Price"
+                fx:id="orderPriceColumn"/>
+
+              <TableColumn text="Total"
+                fx:id="orderTotalColumn"/>
+
+            </columns>
+
+          </TableView>
+
+          <padding>
+            <Insets bottom="15"
+              left="15"
+              right="15"
+              top="15"/>
+          </padding>
+
+        </VBox>
+
+        <VBox spacing="10">
+
+          <Label text="Preview"/>
+
+          <padding>
+            <Insets bottom="15"
+              left="15"
+              right="15"
+              top="15"/>
+          </padding>
+
+        </VBox>
+
+      </items>
+
+    </SplitPane>
+
+  </center>
+
+</BorderPane>

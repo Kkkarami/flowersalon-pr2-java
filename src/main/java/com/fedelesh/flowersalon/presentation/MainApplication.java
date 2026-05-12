@@ -1,5 +1,6 @@
 package com.fedelesh.flowersalon.presentation;
 
+import atlantafx.base.theme.NordLight;
 import com.fedelesh.flowersalon.application.contract.AuthService;
 import com.fedelesh.flowersalon.application.contract.SignUpService;
 import com.fedelesh.flowersalon.application.impl.AuthServiceImpl;
@@ -30,6 +31,7 @@ public class MainApplication extends Application {
     @Override
     public void start(Stage stage) throws Exception {
 
+        Application.setUserAgentStylesheet(new NordLight().getUserAgentStylesheet());
         UserRepository userRepository = new UserRepositoryImpl();
         PasswordHasher passwordHasher = new BcryptPasswordHasher();
         EmailSender emailSender = new SmtpEmailSender();

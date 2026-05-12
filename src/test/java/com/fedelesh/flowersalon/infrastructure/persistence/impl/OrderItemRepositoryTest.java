@@ -17,13 +17,15 @@ class OrderItemRepositoryTest {
 
         UUID orderId = UUID.fromString("7c91a2f4-3d8e-4b10-9a77-1f2c9e33b6d8");
         UUID bouquetId = UUID.fromString("e11f2a33-8c91-4d77-9b10-2a6f91c3d8e4");
+        UUID accessoryId = UUID.fromString("d91b2c44-6f10-4e88-8a2c-1b7d9f33a5e2");
 
         OrderItem item = new OrderItem(
               UUID.randomUUID(),
               orderId,
-              "BOUQUET",
+              "COMBINED",
               null,
               bouquetId,
+              accessoryId,
               2,
               BigDecimal.valueOf(100)
         );

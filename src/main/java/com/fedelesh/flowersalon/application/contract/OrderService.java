@@ -19,4 +19,6 @@ public interface OrderService {
     void delete(UUID id);
 
     BigDecimal calculateTotal(List<OrderItem> items);
+    
+    void update(Order order);
 }

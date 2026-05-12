@@ -91,6 +91,7 @@ CREATE TABLE Order_Items (
                             item_type VARCHAR(20) NOT NULL,
                             flower_id CHAR(36) NULL,
                             bouquet_id CHAR(36) NULL,
+                            accessory_id CHAR(36) NULL,
                             quantity INT NOT NULL,
                             price_snapshot DECIMAL(10,2) NOT NULL,
                             FOREIGN KEY (order_id) REFERENCES Orders(order_id),
