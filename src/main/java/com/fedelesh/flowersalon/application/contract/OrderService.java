@@ -8,17 +8,19 @@ import java.util.UUID;
 
 public interface OrderService {
 
-    void createOrder(Order order, List<OrderItem> items);
+  void createOrder(Order order, List<OrderItem> items);
 
-    Order getById(UUID id);
+  Order getById(UUID id);
 
-    List<Order> getAll();
+  List<Order> getAll();
 
-    List<Order> getByUserId(UUID userId);
+  List<Order> getByUserId(UUID userId);
 
-    void delete(UUID id);
+  void delete(UUID id);
 
-    BigDecimal calculateTotal(List<OrderItem> items);
-    
-    void update(Order order);
+  BigDecimal calculateTotal(List<OrderItem> items);
+
+  List<OrderItem> getItemsByOrderId(UUID orderId);
+
+  void update(Order order);
 }

@@ -13,90 +13,81 @@ import javafx.stage.Stage;
 
 public class LoginController {
 
-    public static AuthService authService;
+  public static AuthService authService;
 
+  @FXML private TextField emailField;
 
-    @FXML
-    private TextField emailField;
+  @FXML private PasswordField passwordField;
 
-    @FXML
-    private PasswordField passwordField;
+  @FXML private Label errorLabel;
 
-    @FXML
-    private Label errorLabel;
+  private LoginViewModel viewModel;
+  private Stage stage;
+  private SignUpService signUpService;
 
-    private LoginViewModel viewModel;
-    private Stage stage;
-    private SignUpService signUpService;
+  public void setViewModel(LoginViewModel viewModel) {
+    this.viewModel = viewModel;
+    authService = viewModel.authService();
+  }
 
-    public void setViewModel(LoginViewModel viewModel) {
-        this.viewModel = viewModel;
-        authService = viewModel.authService();
+  public void setStage(Stage stage) {
+    this.stage = stage;
+  }
+
+  public void setSignUpService(SignUpService signUpService) {
+    this.signUpService = signUpService;
+  }
+
+  private void openMain() {
+    try {
+      FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/main-view.fxml"));
+
+      Parent root = loader.load();
+
+      stage.getScene().setRoot(root);
+      stage.sizeToScene();
+      stage.centerOnScreen();
+      stage.setMaximized(true);
+      stage.setTitle("Main");
+
+    } catch (Exception e) {
+      e.printStackTrace();
     }
+  }
 
-    public void setStage(Stage stage) {
-        this.stage = stage;
+  @FXML
+  private void onLoginClick() {
+
+    errorLabel.setText("");
+
+    try {
+
+      boolean success = viewModel.login(emailField.getText(), passwordField.getText());
+
+      if (success) {
+        openMain();
+      }
+
+    } catch (Exception e) {
+      errorLabel.setText("Неправильний логін або пароль");
     }
+  }
 
-    public void setSignUpService(SignUpService signUpService) {
-        this.signUpService = signUpService;
+  @FXML
+  private void onOpenSignUpClick() {
+    try {
+      FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/signup-view.fxml"));
+      Parent root = loader.load();
+
+      SignUpController controller = loader.getController();
+      controller.setStage(stage);
+      controller.setSignUpService(signUpService);
+
+      stage.getScene().setRoot(root);
+      stage.sizeToScene();
+      stage.centerOnScreen();
+    } catch (Exception e) {
+      e.printStackTrace();
     }
-
-    private void openMain() {
-        try {
-            FXMLLoader loader = new FXMLLoader(
-                  getClass().getResource("/view/main-view.fxml")
-            );
-
-            Parent root = loader.load();
-
-            stage.getScene().setRoot(root);
-            stage.sizeToScene();
-            stage.centerOnScreen();
-            stage.setMaximized(true);
-            stage.setTitle("Main");
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    @FXML
-    private void onLoginClick() {
-
-        errorLabel.setText("");
-
-        try {
-
-            boolean success = viewModel.login(
-                  emailField.getText(),
-                  passwordField.getText()
-            );
-
-            if (success) {
-                openMain();
-            }
-
-        } catch (Exception e) {
-            errorLabel.setText("Неправильний логін або пароль");
-        }
-    }
-
-    @FXML
-    private void onOpenSignUpClick() {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/signup-view.fxml"));
-            Parent root = loader.load();
-
-            SignUpController controller = loader.getController();
-            controller.setStage(stage);
-            controller.setSignUpService(signUpService);
-
-            stage.getScene().setRoot(root);
-            stage.sizeToScene();
-            stage.centerOnScreen();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
+  }
 }

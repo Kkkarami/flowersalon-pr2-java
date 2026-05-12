@@ -12,104 +12,104 @@ import java.util.UUID;
 
 public abstract class BaseRepository<T> implements Repository<T> {
 
-    protected final ConnectionPool pool = ConnectionPool.getInstance();
+  protected final ConnectionPool pool = ConnectionPool.getInstance();
 
-    protected abstract String tableName();
+  protected abstract String tableName();
 
-    protected abstract String idColumn();
+  protected abstract String idColumn();
 
-    protected abstract T map(ResultSet rs) throws SQLException;
+  protected abstract T map(ResultSet rs) throws SQLException;
 
-    protected abstract void setInsertParams(PreparedStatement stmt, T entity) throws SQLException;
+  protected abstract void setInsertParams(PreparedStatement stmt, T entity) throws SQLException;
 
-    protected abstract void setUpdateParams(PreparedStatement stmt, T entity) throws SQLException;
+  protected abstract void setUpdateParams(PreparedStatement stmt, T entity) throws SQLException;
 
-    protected abstract UUID getId(T entity);
+  protected abstract UUID getId(T entity);
 
-    protected abstract String insertSql();
+  protected abstract String insertSql();
 
-    protected abstract String updateSql();
+  protected abstract String updateSql();
 
-    @Override
-    public Optional<T> findById(UUID id) {
-        String sql = "SELECT * FROM " + tableName() + " WHERE " + idColumn() + " = ?";
+  @Override
+  public Optional<T> findById(UUID id) {
+    String sql = "SELECT * FROM " + tableName() + " WHERE " + idColumn() + " = ?";
 
-        try (Connection conn = pool.getConnection();
-              PreparedStatement stmt = conn.prepareStatement(sql)) {
+    try (Connection conn = pool.getConnection();
+        PreparedStatement stmt = conn.prepareStatement(sql)) {
 
-            stmt.setString(1, id.toString());
+      stmt.setString(1, id.toString());
 
-            try (ResultSet rs = stmt.executeQuery()) {
-                if (rs.next()) {
-                    return Optional.of(map(rs));
-                }
-            }
-
-        } catch (SQLException e) {
-            throw new RuntimeException("Помилка при пошуку сутності за id", e);
+      try (ResultSet rs = stmt.executeQuery()) {
+        if (rs.next()) {
+          return Optional.of(map(rs));
         }
+      }
 
-        return Optional.empty();
+    } catch (SQLException e) {
+      throw new RuntimeException("Помилка при пошуку сутності за id", e);
     }
 
-    @Override
-    public List<T> findAll() {
-        List<T> list = new ArrayList<>();
-        String sql = "SELECT * FROM " + tableName();
+    return Optional.empty();
+  }
 
-        try (Connection conn = pool.getConnection();
-              PreparedStatement stmt = conn.prepareStatement(sql);
-              ResultSet rs = stmt.executeQuery()) {
+  @Override
+  public List<T> findAll() {
+    List<T> list = new ArrayList<>();
+    String sql = "SELECT * FROM " + tableName();
 
-            while (rs.next()) {
-                list.add(map(rs));
-            }
+    try (Connection conn = pool.getConnection();
+        PreparedStatement stmt = conn.prepareStatement(sql);
+        ResultSet rs = stmt.executeQuery()) {
 
-        } catch (SQLException e) {
-            throw new RuntimeException("Помилка при отриманні списку сутностей", e);
-        }
+      while (rs.next()) {
+        list.add(map(rs));
+      }
 
-        return list;
+    } catch (SQLException e) {
+      throw new RuntimeException("Помилка при отриманні списку сутностей", e);
     }
 
-    @Override
-    public void save(T entity) {
-        try (Connection conn = pool.getConnection();
-              PreparedStatement stmt = conn.prepareStatement(insertSql())) {
+    return list;
+  }
 
-            setInsertParams(stmt, entity);
-            stmt.executeUpdate();
+  @Override
+  public void save(T entity) {
+    try (Connection conn = pool.getConnection();
+        PreparedStatement stmt = conn.prepareStatement(insertSql())) {
 
-        } catch (SQLException e) {
-            throw new RuntimeException("Помилка при збереженні сутності", e);
-        }
+      setInsertParams(stmt, entity);
+      stmt.executeUpdate();
+
+    } catch (SQLException e) {
+      throw new RuntimeException("Помилка при збереженні сутності", e);
     }
+  }
 
-    @Override
-    public void update(T entity) {
-        try (Connection conn = pool.getConnection();
-              PreparedStatement stmt = conn.prepareStatement(updateSql())) {
+  @Override
+  public void update(T entity) {
+    try (Connection conn = pool.getConnection();
+        PreparedStatement stmt = conn.prepareStatement(updateSql())) {
 
-            setUpdateParams(stmt, entity);
-            stmt.executeUpdate();
+      setUpdateParams(stmt, entity);
+      stmt.executeUpdate();
 
-        } catch (SQLException e) {
-            throw new RuntimeException("Помилка при оновленні сутності", e);
-        }
+    } catch (SQLException e) {
+      throw new RuntimeException("Помилка при оновленні сутності", e);
     }
+  }
 
-    @Override
-    public void deleteById(UUID id) {
-        String sql = "DELETE FROM " + tableName() + " WHERE " + idColumn() + " = ?";
+  @Override
+  public void deleteById(UUID id) {
+    String sql = "DELETE FROM " + tableName() + " WHERE " + idColumn() + " = ?";
 
-        try (Connection conn = pool.getConnection();
-              PreparedStatement stmt = conn.prepareStatement(sql)) {
+    try (Connection conn = pool.getConnection();
+        PreparedStatement stmt = conn.prepareStatement(sql)) {
 
-            stmt.setString(1, id.toString());
-            stmt.executeUpdate();
+      stmt.setString(1, id.toString());
+      stmt.executeUpdate();
 
-        } catch (SQLException e) {
-            throw new RuntimeException("Помилка при видаленні сутності", e);
-        }
+    } catch (SQLException e) {
+      throw new RuntimeException("Помилка при видаленні сутності", e);
     }
+  }
 }

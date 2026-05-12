@@ -12,80 +12,83 @@ import java.util.UUID;
 
 public class OrderServiceImpl implements OrderService {
 
-    private final OrderRepository orderRepository;
-    private final OrderItemRepository orderItemRepository;
+  private final OrderRepository orderRepository;
+  private final OrderItemRepository orderItemRepository;
 
-    public OrderServiceImpl(OrderRepository orderRepository,
-          OrderItemRepository orderItemRepository) {
-        this.orderRepository = orderRepository;
-        this.orderItemRepository = orderItemRepository;
+  public OrderServiceImpl(
+      OrderRepository orderRepository, OrderItemRepository orderItemRepository) {
+    this.orderRepository = orderRepository;
+    this.orderItemRepository = orderItemRepository;
+  }
+
+  @Override
+  public void createOrder(Order order, List<OrderItem> items) {
+
+    UUID orderId = UUID.randomUUID();
+    order.setOrderId(orderId);
+
+    if (order.getCreatedAt() == null) {
+      order.setCreatedAt(LocalDateTime.now());
     }
 
-    @Override
-    public void createOrder(Order order, List<OrderItem> items) {
+    orderRepository.save(order);
 
-        UUID orderId = UUID.randomUUID();
-        order.setOrderId(orderId);
+    for (OrderItem item : items) {
 
-        if (order.getCreatedAt() == null) {
-            order.setCreatedAt(LocalDateTime.now());
-        }
+      item.setOrderItemId(UUID.randomUUID());
+      item.setOrderId(orderId);
 
-        orderRepository.save(order);
+      orderItemRepository.save(item);
+    }
+  }
 
-        for (OrderItem item : items) {
+  @Override
+  public Order getById(UUID id) {
+    return orderRepository.findById(id).orElseThrow(() -> new RuntimeException("Order not found"));
+  }
 
-            item.setOrderItemId(UUID.randomUUID());
-            item.setOrderId(orderId);
+  @Override
+  public List<Order> getAll() {
+    return orderRepository.findAll();
+  }
 
-            orderItemRepository.save(item);
-        }
+  @Override
+  public List<Order> getByUserId(UUID userId) {
+    return orderRepository.findByUserId(userId);
+  }
+
+  @Override
+  public void delete(UUID id) {
+    List<OrderItem> items = orderItemRepository.findByOrderId(id);
+
+    for (OrderItem item : items) {
+      orderItemRepository.deleteById(item.getOrderItemId());
     }
 
-    @Override
-    public Order getById(UUID id) {
-        return orderRepository.findById(id)
-              .orElseThrow(() -> new RuntimeException("Order not found"));
+    orderRepository.deleteById(id);
+  }
+
+  @Override
+  public BigDecimal calculateTotal(List<OrderItem> items) {
+    BigDecimal total = BigDecimal.ZERO;
+
+    for (OrderItem item : items) {
+      BigDecimal line = item.getPriceSnapshot().multiply(BigDecimal.valueOf(item.getQuantity()));
+      total = total.add(line);
     }
 
-    @Override
-    public List<Order> getAll() {
-        return orderRepository.findAll();
-    }
+    return total;
+  }
 
-    @Override
-    public List<Order> getByUserId(UUID userId) {
-        return orderRepository.findByUserId(userId);
-    }
+  @Override
+  public void update(Order order) {
 
-    @Override
-    public void delete(UUID id) {
-        List<OrderItem> items = orderItemRepository.findByOrderId(id);
+    orderRepository.update(order);
+  }
 
-        for (OrderItem item : items) {
-            orderItemRepository.deleteById(item.getOrderItemId());
-        }
+  @Override
+  public List<OrderItem> getItemsByOrderId(UUID orderId) {
 
-        orderRepository.deleteById(id);
-    }
-
-    @Override
-    public BigDecimal calculateTotal(List<OrderItem> items) {
-        BigDecimal total = BigDecimal.ZERO;
-
-        for (OrderItem item : items) {
-            BigDecimal line = item.getPriceSnapshot()
-                  .multiply(BigDecimal.valueOf(item.getQuantity()));
-            total = total.add(line);
-        }
-
-        return total;
-    }
-    
-    @Override
-    public void update(Order order) {
-
-        orderRepository.update(order);
-    }
-
+    return orderItemRepository.findByOrderId(orderId);
+  }
 }

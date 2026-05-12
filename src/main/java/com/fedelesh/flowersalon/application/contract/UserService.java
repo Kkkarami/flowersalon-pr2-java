@@ -5,5 +5,5 @@ import java.util.List;
 
 public interface UserService {
 
-    List<User> getAll();
+  List<User> getAll();
 }

@@ -6,72 +6,75 @@ import java.util.UUID;
 
 public class Accessory {
 
-    private UUID accessoryId;
-    private String name;
-    private AccessoryType accessoryType;
-    private String color;
-    private BigDecimal price;
-    private int stockQuantity;
+  private UUID accessoryId;
+  private String name;
+  private AccessoryType accessoryType;
+  private String color;
+  private BigDecimal price;
+  private int stockQuantity;
 
-    public Accessory() {
-    }
+  public Accessory() {}
 
-    public Accessory(UUID accessoryId, String name, AccessoryType accessoryType, String color,
-          BigDecimal price,
-          int stockQuantity) {
-        this.accessoryId = accessoryId;
-        this.name = name;
-        this.accessoryType = accessoryType;
-        this.color = color;
-        this.price = price;
-        this.stockQuantity = stockQuantity;
-    }
+  public Accessory(
+      UUID accessoryId,
+      String name,
+      AccessoryType accessoryType,
+      String color,
+      BigDecimal price,
+      int stockQuantity) {
+    this.accessoryId = accessoryId;
+    this.name = name;
+    this.accessoryType = accessoryType;
+    this.color = color;
+    this.price = price;
+    this.stockQuantity = stockQuantity;
+  }
 
-    public UUID getAccessoryId() {
-        return accessoryId;
-    }
+  public UUID getAccessoryId() {
+    return accessoryId;
+  }
 
-    public void setAccessoryId(UUID accessoryId) {
-        this.accessoryId = accessoryId;
-    }
+  public void setAccessoryId(UUID accessoryId) {
+    this.accessoryId = accessoryId;
+  }
 
-    public String getName() {
-        return name;
-    }
+  public String getName() {
+    return name;
+  }
 
-    public void setName(String name) {
-        this.name = name;
-    }
+  public void setName(String name) {
+    this.name = name;
+  }
 
-    public AccessoryType getAccessoryType() {
-        return accessoryType;
-    }
+  public AccessoryType getAccessoryType() {
+    return accessoryType;
+  }
 
-    public void setAccessoryType(AccessoryType accessoryType) {
-        this.accessoryType = accessoryType;
-    }
+  public void setAccessoryType(AccessoryType accessoryType) {
+    this.accessoryType = accessoryType;
+  }
 
-    public String getColor() {
-        return color;
-    }
+  public String getColor() {
+    return color;
+  }
 
-    public void setColor(String color) {
-        this.color = color;
-    }
+  public void setColor(String color) {
+    this.color = color;
+  }
 
-    public BigDecimal getPrice() {
-        return price;
-    }
+  public BigDecimal getPrice() {
+    return price;
+  }
 
-    public void setPrice(BigDecimal price) {
-        this.price = price;
-    }
+  public void setPrice(BigDecimal price) {
+    this.price = price;
+  }
 
-    public int getStockQuantity() {
-        return stockQuantity;
-    }
+  public int getStockQuantity() {
+    return stockQuantity;
+  }
 
-    public void setStockQuantity(int stockQuantity) {
-        this.stockQuantity = stockQuantity;
-    }
+  public void setStockQuantity(int stockQuantity) {
+    this.stockQuantity = stockQuantity;
+  }
 }

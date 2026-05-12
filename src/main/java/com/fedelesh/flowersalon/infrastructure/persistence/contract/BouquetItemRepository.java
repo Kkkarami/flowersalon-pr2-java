@@ -7,5 +7,5 @@ import java.util.UUID;
 
 public interface BouquetItemRepository extends Repository<BouquetItem> {
 
-    List<BouquetItem> findByBouquetId(UUID bouquetId);
+  List<BouquetItem> findByBouquetId(UUID bouquetId);
 }

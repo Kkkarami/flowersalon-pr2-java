@@ -6,5 +6,5 @@ import java.util.List;
 
 public interface FlowerRepository extends Repository<Flower> {
 
-    List<Flower> findByColor(String color);
+  List<Flower> findByColor(String color);
 }

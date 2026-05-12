@@ -5,94 +5,77 @@ import java.util.regex.Pattern;
 
 public class ValidationHelper {
 
-    private static final Pattern EMAIL_PATTERN =
-          Pattern.compile("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$");
+  private static final Pattern EMAIL_PATTERN = Pattern.compile("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$");
 
-    private static final Pattern PHONE_PATTERN =
-          Pattern.compile("^\\+380\\d{9}$");
+  private static final Pattern PHONE_PATTERN = Pattern.compile("^\\+380\\d{9}$");
 
-    private final MultiFieldValidationException validationException;
+  private final MultiFieldValidationException validationException;
 
-    public ValidationHelper() {
-        this.validationException = new MultiFieldValidationException();
+  public ValidationHelper() {
+    this.validationException = new MultiFieldValidationException();
+  }
+
+  public ValidationHelper notEmpty(String fieldName, String value) {
+
+    if (value == null || value.trim().isEmpty()) {
+
+      validationException.addFieldError(fieldName, "Поле обов'язкове");
     }
 
-    public ValidationHelper notEmpty(String fieldName, String value) {
+    return this;
+  }
 
-        if (value == null || value.trim().isEmpty()) {
+  public ValidationHelper validEmail(String fieldName, String email) {
 
-            validationException.addFieldError(
-                  fieldName,
-                  "Поле обов'язкове"
-            );
-        }
+    if (email != null && !EMAIL_PATTERN.matcher(email).matches()) {
 
-        return this;
+      validationException.addFieldError(fieldName, "Email має містити @ та домен");
     }
 
-    public ValidationHelper validEmail(String fieldName, String email) {
+    return this;
+  }
 
-        if (email != null && !EMAIL_PATTERN.matcher(email).matches()) {
+  public ValidationHelper validPhone(String fieldName, String phone) {
 
-            validationException.addFieldError(
-                  fieldName,
-                  "Email має містити @ та домен"
-            );
-        }
+    if (phone != null && !PHONE_PATTERN.matcher(phone).matches()) {
 
-        return this;
+      validationException.addFieldError(fieldName, "Формат: +380XXXXXXXXX");
     }
 
-    public ValidationHelper validPhone(String fieldName, String phone) {
+    return this;
+  }
 
-        if (phone != null && !PHONE_PATTERN.matcher(phone).matches()) {
+  public ValidationHelper minLength(String fieldName, String value, int minLength) {
 
-            validationException.addFieldError(
-                  fieldName,
-                  "Формат: +380XXXXXXXXX"
-            );
-        }
+    if (value != null && value.trim().length() < minLength) {
 
-        return this;
+      validationException.addFieldError(fieldName, "Мінімум " + minLength + " символи");
     }
 
-    public ValidationHelper minLength(String fieldName, String value, int minLength) {
+    return this;
+  }
 
-        if (value != null && value.trim().length() < minLength) {
+  public ValidationHelper maxLength(String fieldName, String value, int maxLength) {
 
-            validationException.addFieldError(
-                  fieldName,
-                  "Мінімум " + minLength + " символи"
-            );
-        }
+    if (value != null && value.trim().length() > maxLength) {
 
-        return this;
+      validationException.addFieldError(fieldName, "Максимум " + maxLength + " символів");
     }
 
-    public ValidationHelper maxLength(String fieldName, String value, int maxLength) {
+    return this;
+  }
 
-        if (value != null && value.trim().length() > maxLength) {
+  public ValidationHelper addErrorIf(boolean condition, String fieldName, String message) {
 
-            validationException.addFieldError(
-                  fieldName,
-                  "Максимум " + maxLength + " символів"
-            );
-        }
+    if (condition) {
 
-        return this;
+      validationException.addFieldError(fieldName, message);
     }
 
-    public ValidationHelper addErrorIf(boolean condition, String fieldName, String message) {
+    return this;
+  }
 
-        if (condition) {
-
-            validationException.addFieldError(fieldName, message);
-        }
-
-        return this;
-    }
-
-    public void throwIfHasErrors() {
-        validationException.throwIfHasErrors();
-    }
+  public void throwIfHasErrors() {
+    validationException.throwIfHasErrors();
+  }
 }

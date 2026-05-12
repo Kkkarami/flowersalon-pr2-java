@@ -4,18 +4,16 @@ import org.flywaydb.core.Flyway;
 
 public class DatabaseInitializer {
 
-    private static final String URL = "jdbc:h2:~/flowersalondb";
-    private static final String USER = "sa";
-    private static final String PASSWORD = "";
+  private static final String URL = "jdbc:h2:~/flowersalondb";
+  private static final String USER = "sa";
+  private static final String PASSWORD = "";
 
-    public static void init() {
+  public static void init() {
 
-        Flyway flyway = Flyway.configure()
-              .dataSource(URL, USER, PASSWORD)
-              .load();
+    Flyway flyway = Flyway.configure().dataSource(URL, USER, PASSWORD).load();
 
-        flyway.migrate();
+    flyway.migrate();
 
-        System.out.println("Database migration completed");
-    }
+    System.out.println("Database migration completed");
+  }
 }

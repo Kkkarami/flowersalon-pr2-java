@@ -7,16 +7,16 @@ import java.util.List;
 
 public class UserServiceImpl implements UserService {
 
-    private final UserRepository userRepository;
+  private final UserRepository userRepository;
 
-    public UserServiceImpl(UserRepository userRepository) {
+  public UserServiceImpl(UserRepository userRepository) {
 
-        this.userRepository = userRepository;
-    }
+    this.userRepository = userRepository;
+  }
 
-    @Override
-    public List<User> getAll() {
+  @Override
+  public List<User> getAll() {
 
-        return userRepository.findAll();
-    }
+    return userRepository.findAll();
+  }
 }

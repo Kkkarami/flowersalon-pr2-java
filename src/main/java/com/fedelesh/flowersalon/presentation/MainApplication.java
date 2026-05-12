@@ -21,37 +21,35 @@ import javafx.stage.Stage;
 
 public class MainApplication extends Application {
 
-    private AuthService authService;
-    private SignUpService signUpService;
+  private AuthService authService;
+  private SignUpService signUpService;
 
-    public static void main(String[] args) {
-        launch();
-    }
+  public static void main(String[] args) {
+    launch();
+  }
 
-    @Override
-    public void start(Stage stage) throws Exception {
+  @Override
+  public void start(Stage stage) throws Exception {
 
-        Application.setUserAgentStylesheet(new NordLight().getUserAgentStylesheet());
-        UserRepository userRepository = new UserRepositoryImpl();
-        PasswordHasher passwordHasher = new BcryptPasswordHasher();
-        EmailSender emailSender = new SmtpEmailSender();
+    Application.setUserAgentStylesheet(new NordLight().getUserAgentStylesheet());
+    UserRepository userRepository = new UserRepositoryImpl();
+    PasswordHasher passwordHasher = new BcryptPasswordHasher();
+    EmailSender emailSender = new SmtpEmailSender();
 
-        authService = new AuthServiceImpl(userRepository, passwordHasher);
-        signUpService = new SignUpServiceImpl(userRepository, passwordHasher, emailSender);
+    authService = new AuthServiceImpl(userRepository, passwordHasher);
+    signUpService = new SignUpServiceImpl(userRepository, passwordHasher, emailSender);
 
-        FXMLLoader loader = new FXMLLoader(
-              getClass().getResource("/view/login-view.fxml")
-        );
+    FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/login-view.fxml"));
 
-        Parent root = loader.load();
+    Parent root = loader.load();
 
-        LoginController controller = loader.getController();
-        controller.setStage(stage);
-        controller.setViewModel(new LoginViewModel(authService));
-        controller.setSignUpService(signUpService);
+    LoginController controller = loader.getController();
+    controller.setStage(stage);
+    controller.setViewModel(new LoginViewModel(authService));
+    controller.setSignUpService(signUpService);
 
-        stage.setScene(new Scene(root));
-        stage.setTitle("Login");
-        stage.show();
-    }
+    stage.setScene(new Scene(root));
+    stage.setTitle("Login");
+    stage.show();
+  }
 }

@@ -110,7 +110,8 @@
               text="Remove Selected"/>
 
             <Button onAction="#handleCreateOrder"
-              text="Create Order"/>
+              text="Create Order"
+              fx:id="createOrderButton"/>
 
             <HBox HBox.hgrow="ALWAYS"/>
 

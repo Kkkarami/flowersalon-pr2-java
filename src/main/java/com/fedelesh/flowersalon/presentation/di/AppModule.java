@@ -13,28 +13,28 @@ import com.fedelesh.flowersalon.infrastructure.security.PasswordHasher;
 
 public class AppModule {
 
-    private final UserRepository userRepository;
-    private final PasswordHasher passwordHasher;
-    private final EmailSender emailSender;
+  private final UserRepository userRepository;
+  private final PasswordHasher passwordHasher;
+  private final EmailSender emailSender;
 
-    private final AuthService authService;
-    private final SignUpService signUpService;
+  private final AuthService authService;
+  private final SignUpService signUpService;
 
-    public AppModule() {
+  public AppModule() {
 
-        this.userRepository = new UserRepositoryImpl();
-        this.passwordHasher = new BcryptPasswordHasher();
-        this.emailSender = new SmtpEmailSender();
+    this.userRepository = new UserRepositoryImpl();
+    this.passwordHasher = new BcryptPasswordHasher();
+    this.emailSender = new SmtpEmailSender();
 
-        this.authService = new AuthServiceImpl(userRepository, passwordHasher);
-        this.signUpService = new SignUpServiceImpl(userRepository, passwordHasher, emailSender);
-    }
+    this.authService = new AuthServiceImpl(userRepository, passwordHasher);
+    this.signUpService = new SignUpServiceImpl(userRepository, passwordHasher, emailSender);
+  }
 
-    public AuthService authService() {
-        return authService;
-    }
+  public AuthService authService() {
+    return authService;
+  }
 
-    public SignUpService signUpService() {
-        return signUpService;
-    }
+  public SignUpService signUpService() {
+    return signUpService;
+  }
 }
