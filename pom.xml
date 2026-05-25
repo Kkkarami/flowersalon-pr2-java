@@ -1,79 +1,109 @@
 <?xml version="1.0" encoding="UTF-8"?>
+
 <project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xmlns="http://maven.apache.org/POM/4.0.0"
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
   <artifactId>flowersalonjavafx</artifactId>
+
   <build>
     <plugins>
+
+      <!-- JavaFX plugin (для mvn javafx:run) -->
+      <plugin>
+        <artifactId>javafx-maven-plugin</artifactId>
+        <configuration>
+          <mainClass>com.fedelesh.flowersalon.presentation.Launcher</mainClass>
+        </configuration>
+        <groupId>org.openjfx</groupId>
+        <version>0.0.8</version>
+      </plugin>
+
+      <!-- FAT JAR -->
+      <plugin>
+        <artifactId>maven-shade-plugin</artifactId>
+        <executions>
+          <execution>
+            <configuration>
+              <transformers>
+                <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+                  <mainClass>com.fedelesh.flowersalon.presentation.Launcher</mainClass>
+                </transformer>
+              </transformers>
+            </configuration>
+            <goals>
+              <goal>shade</goal>
+            </goals>
+
+            <phase>package</phase>
+
+          </execution>
+        </executions>
+        <groupId>org.apache.maven.plugins</groupId>
+
+        <version>3.5.3</version>
+
+      </plugin>
+
       <plugin>
         <artifactId>maven-surefire-plugin</artifactId>
         <groupId>org.apache.maven.plugins</groupId>
         <version>3.2.5</version>
       </plugin>
-      <plugin>
-        <artifactId>javafx-maven-plugin</artifactId>
-        <configuration>
-          <mainClass>
-            com.fedelesh.flowersalon.presentation.MainApplication
-          </mainClass>
-        </configuration>
-        <groupId>org.openjfx</groupId>
-        <version>0.0.8</version>
-      </plugin>
-      <plugin>
-        <artifactId>spotless-maven-plugin</artifactId>
-        <configuration>
-          <java>
-            <palantirJavaFormat/>
-          </java>
-        </configuration>
-        <groupId>com.diffplug.spotless</groupId>
-        <version>2.44.0</version>
-      </plugin>
+
     </plugins>
   </build>
   <dependencies>
+
+    <dependency>
+      <artifactId>javafx-controls</artifactId>
+      <groupId>org.openjfx</groupId>
+      <version>21.0.2</version>
+    </dependency>
+
+    <dependency>
+      <artifactId>javafx-fxml</artifactId>
+      <groupId>org.openjfx</groupId>
+      <version>21.0.2</version>
+    </dependency>
+
     <dependency>
       <artifactId>h2</artifactId>
       <groupId>com.h2database</groupId>
       <version>2.4.240</version>
     </dependency>
+
     <dependency>
       <artifactId>junit-jupiter</artifactId>
       <groupId>org.junit.jupiter</groupId>
       <scope>test</scope>
       <version>5.10.2</version>
     </dependency>
+
     <dependency>
       <artifactId>flyway-core</artifactId>
       <groupId>org.flywaydb</groupId>
       <version>11.8.0</version>
     </dependency>
+
     <dependency>
       <artifactId>jbcrypt</artifactId>
       <groupId>org.mindrot</groupId>
       <version>0.4</version>
     </dependency>
+
     <dependency>
       <artifactId>jakarta.mail</artifactId>
       <groupId>com.sun.mail</groupId>
       <version>2.0.1</version>
     </dependency>
-    <dependency>
-      <artifactId>javafx-controls</artifactId>
-      <groupId>org.openjfx</groupId>
-      <version>21.0.2</version>
-    </dependency>
-    <dependency>
-      <artifactId>javafx-fxml</artifactId>
-      <groupId>org.openjfx</groupId>
-      <version>21.0.2</version>
-    </dependency>
+
     <dependency>
       <artifactId>guice</artifactId>
       <groupId>com.google.inject</groupId>
       <version>7.0.0</version>
     </dependency>
+
     <dependency>
       <artifactId>atlantafx-base</artifactId>
       <groupId>io.github.mkpaz</groupId>
@@ -81,7 +111,6 @@
     </dependency>
 
   </dependencies>
-
   <groupId>com.fedelesh</groupId>
 
   <modelVersion>4.0.0</modelVersion>
@@ -93,4 +122,5 @@
   </properties>
 
   <version>1.0-SNAPSHOT</version>
+
 </project>

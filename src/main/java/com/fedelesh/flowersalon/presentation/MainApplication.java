@@ -9,7 +9,6 @@ import com.fedelesh.flowersalon.infrastructure.email.EmailSender;
 import com.fedelesh.flowersalon.infrastructure.email.SmtpEmailSender;
 import com.fedelesh.flowersalon.infrastructure.persistence.contract.UserRepository;
 import com.fedelesh.flowersalon.infrastructure.persistence.impl.UserRepositoryImpl;
-import com.fedelesh.flowersalon.infrastructure.persistence.util.DatabaseInitializer;
 import com.fedelesh.flowersalon.infrastructure.security.BcryptPasswordHasher;
 import com.fedelesh.flowersalon.infrastructure.security.PasswordHasher;
 import com.fedelesh.flowersalon.presentation.controller.LoginController;
@@ -30,7 +29,6 @@ public class MainApplication extends Application {
     public static SignUpService signUpService;
 
     public static void main(String[] args) {
-        DatabaseInitializer.init();
         launch();
     }
 
