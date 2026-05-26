@@ -23,33 +23,54 @@ public class AccessoryRepositoryImpl extends BaseRepository<Accessory> implement
 
     @Override
     protected Accessory map(ResultSet rs) throws SQLException {
+        AccessoryType accessoryType = null;
+
+        if (rs.getString("type") != null) {
+            accessoryType = AccessoryType.valueOf(rs.getString("type"));
+        }
+
         return new Accessory(
-                UUID.fromString(rs.getString("accessory_id")),
-                rs.getString("name"),
-                rs.getString("type") != null ? AccessoryType.valueOf(rs.getString("type")) : null,
-                rs.getString("color"),
-                rs.getBigDecimal("price"),
-                rs.getInt("stock_quantity"));
+              UUID.fromString(rs.getString("accessory_id")),
+              rs.getString("name"),
+              accessoryType,
+              rs.getString("color"),
+              rs.getBigDecimal("price"),
+              rs.getInt("stock_quantity"),
+              rs.getString("image_path"));
     }
 
     @Override
-    protected void setInsertParams(PreparedStatement stmt, Accessory a) throws SQLException {
-        stmt.setString(1, a.getAccessoryId().toString());
-        stmt.setString(2, a.getName());
-        stmt.setString(3, a.getAccessoryType() != null ? a.getAccessoryType().name() : null);
-        stmt.setString(4, a.getColor());
-        stmt.setBigDecimal(5, a.getPrice());
-        stmt.setInt(6, a.getStockQuantity());
+    protected void setInsertParams(PreparedStatement stmt, Accessory accessory) throws SQLException {
+        stmt.setString(1, accessory.getAccessoryId().toString());
+        stmt.setString(2, accessory.getName());
+
+        if (accessory.getAccessoryType() != null) {
+            stmt.setString(3, accessory.getAccessoryType().name());
+        } else {
+            stmt.setString(3, null);
+        }
+
+        stmt.setString(4, accessory.getColor());
+        stmt.setBigDecimal(5, accessory.getPrice());
+        stmt.setInt(6, accessory.getStockQuantity());
+        stmt.setString(7, accessory.getImagePath());
     }
 
     @Override
-    protected void setUpdateParams(PreparedStatement stmt, Accessory a) throws SQLException {
-        stmt.setString(1, a.getName());
-        stmt.setString(2, a.getAccessoryType() != null ? a.getAccessoryType().name() : null);
-        stmt.setString(3, a.getColor());
-        stmt.setBigDecimal(4, a.getPrice());
-        stmt.setInt(5, a.getStockQuantity());
-        stmt.setString(6, a.getAccessoryId().toString());
+    protected void setUpdateParams(PreparedStatement stmt, Accessory accessory) throws SQLException {
+        stmt.setString(1, accessory.getName());
+
+        if (accessory.getAccessoryType() != null) {
+            stmt.setString(2, accessory.getAccessoryType().name());
+        } else {
+            stmt.setString(2, null);
+        }
+
+        stmt.setString(3, accessory.getColor());
+        stmt.setBigDecimal(4, accessory.getPrice());
+        stmt.setInt(5, accessory.getStockQuantity());
+        stmt.setString(6, accessory.getImagePath());
+        stmt.setString(7, accessory.getAccessoryId().toString());
     }
 
     @Override
@@ -59,11 +80,11 @@ public class AccessoryRepositoryImpl extends BaseRepository<Accessory> implement
 
     @Override
     protected String insertSql() {
-        return "INSERT INTO Accessories (accessory_id, name, type, color, price, stock_quantity) VALUES (?, ?, ?, ?, ?, ?)";
+        return "INSERT INTO Accessories (accessory_id, name, type, color, price, stock_quantity, image_path) VALUES (?, ?, ?, ?, ?, ?, ?)";
     }
 
     @Override
     protected String updateSql() {
-        return "UPDATE Accessories SET name=?, type=?, color=?, price=?, stock_quantity=? WHERE accessory_id=?";
+        return "UPDATE Accessories SET name=?, type=?, color=?, price=?, stock_quantity=?, image_path=? WHERE accessory_id=?";
     }
 }

@@ -14,6 +14,7 @@ import com.fedelesh.flowersalon.domain.entity.Bouquet;
 import com.fedelesh.flowersalon.domain.entity.Flower;
 import com.fedelesh.flowersalon.domain.entity.Order;
 import com.fedelesh.flowersalon.domain.entity.OrderItem;
+import com.fedelesh.flowersalon.domain.enums.OrderStatus;
 import com.fedelesh.flowersalon.infrastructure.persistence.impl.AccessoryRepositoryImpl;
 import com.fedelesh.flowersalon.infrastructure.persistence.impl.BouquetRepositoryImpl;
 import com.fedelesh.flowersalon.infrastructure.persistence.impl.FlowerRepositoryImpl;
@@ -40,14 +41,17 @@ public class CreateOrderViewModel {
     private final ObservableList<Bouquet> bouquets = FXCollections.observableArrayList();
     private final ObservableList<Accessory> accessories = FXCollections.observableArrayList();
     private final ObservableList<OrderLineViewModel> orderItems = FXCollections.observableArrayList();
+
     private final StringProperty totalText = new SimpleStringProperty("0");
 
     public CreateOrderViewModel(AuthService authService) {
         this.authService = authService;
+
         flowerService = new FlowerServiceImpl(new FlowerRepositoryImpl());
         bouquetService = new BouquetServiceImpl(new BouquetRepositoryImpl());
         accessoryService = new AccessoryServiceImpl(new AccessoryRepositoryImpl());
         orderService = new OrderServiceImpl(new OrderRepositoryImpl(), new OrderItemRepositoryImpl());
+
         loadData();
     }
 
@@ -55,27 +59,6 @@ public class CreateOrderViewModel {
         flowers.setAll(flowerService.getAll());
         bouquets.setAll(bouquetService.getAll());
         accessories.setAll(accessoryService.getAll());
-    }
-
-    public String getCurrentUserFirstName() {
-        if (authService == null || authService.getCurrentUser() == null) {
-            return "";
-        }
-        return authService.getCurrentUser().getFirstName();
-    }
-
-    public String getCurrentUserLastName() {
-        if (authService == null || authService.getCurrentUser() == null) {
-            return "";
-        }
-        return authService.getCurrentUser().getLastName();
-    }
-
-    public String getCurrentUserPhone() {
-        if (authService == null || authService.getCurrentUser() == null) {
-            return "";
-        }
-        return authService.getCurrentUser().getPhone();
     }
 
     public ObservableList<Flower> getFlowers() {
@@ -98,95 +81,157 @@ public class CreateOrderViewModel {
         return totalText;
     }
 
-    public void addFlower(Flower flower) {
+    public String getCurrentUserFirstName() {
+        if (authService == null || authService.getCurrentUser() == null) {
+            return "";
+        }
+
+        return authService.getCurrentUser().getFirstName();
+    }
+
+    public String getCurrentUserLastName() {
+        if (authService == null || authService.getCurrentUser() == null) {
+            return "";
+        }
+
+        return authService.getCurrentUser().getLastName();
+    }
+
+    public String getCurrentUserPhone() {
+        if (authService == null || authService.getCurrentUser() == null) {
+            return "";
+        }
+
+        return authService.getCurrentUser().getPhone();
+    }
+
+    public OrderLineViewModel addFlower(Flower flower) {
         if (flower == null) {
-            return;
+            return null;
         }
-        OrderLineViewModel item = new OrderLineViewModel("Flower", flower.getName(), 1, flower.getPrice());
+
+        OrderLineViewModel item = new OrderLineViewModel(
+              "Flower",
+              flower.getName(),
+              1,
+              flower.getPrice(),
+              flower.getImagePath()
+        );
+
         item.setFlowerId(flower.getFlowerId());
+
         orderItems.add(item);
         updateTotal();
+
+        return item;
     }
 
-    public void addBouquet(Bouquet bouquet) {
+    public OrderLineViewModel addBouquet(Bouquet bouquet) {
         if (bouquet == null) {
-            return;
+            return null;
         }
-        OrderLineViewModel item = new OrderLineViewModel("Bouquet", bouquet.getName(), 1, BigDecimal.valueOf(500));
+
+        OrderLineViewModel item = new OrderLineViewModel(
+              "Bouquet",
+              bouquet.getName(),
+              1,
+              BigDecimal.ZERO,
+              bouquet.getImagePath()
+        );
+
         item.setBouquetId(bouquet.getBouquetId());
+
         orderItems.add(item);
         updateTotal();
+
+        return item;
     }
 
-    public void addAccessory(Accessory accessory) {
+    public OrderLineViewModel addAccessory(Accessory accessory) {
         if (accessory == null) {
-            return;
+            return null;
         }
-        OrderLineViewModel item = new OrderLineViewModel("Accessory", accessory.getName(), 1, accessory.getPrice());
+
+        OrderLineViewModel item = new OrderLineViewModel(
+              "Accessory",
+              accessory.getName(),
+              1,
+              accessory.getPrice(),
+              accessory.getImagePath()
+        );
+
         item.setAccessoryId(accessory.getAccessoryId());
+
         orderItems.add(item);
         updateTotal();
+
+        return item;
     }
 
     public void removeItem(OrderLineViewModel item) {
         if (item == null) {
             return;
         }
+
         orderItems.remove(item);
         updateTotal();
     }
 
     private void updateTotal() {
-        List<OrderItem> items = new ArrayList<>();
-        for (OrderLineViewModel vm : orderItems) {
-            OrderItem item = new OrderItem();
-            item.setQuantity(vm.getQuantity());
-            item.setPriceSnapshot(vm.getPrice());
-            items.add(item);
+        BigDecimal total = BigDecimal.ZERO;
+
+        for (OrderLineViewModel item : orderItems) {
+            total = total.add(item.getTotal());
         }
-        BigDecimal total = orderService.calculateTotal(items);
+
         totalText.set(total.toString());
     }
 
     public void loadOrderItems(Order order) {
-
         orderItems.clear();
+
+        if (order == null) {
+            updateTotal();
+            return;
+        }
 
         List<OrderItem> items = orderService.getItemsByOrderId(order.getOrderId());
 
         for (OrderItem item : items) {
-
-            String name = "Unknown";
+            String name = "";
+            String imagePath = "";
 
             if (item.getFlowerId() != null) {
-
                 Flower flower = flowerService.getById(item.getFlowerId());
-
                 name = flower.getName();
+                imagePath = flower.getImagePath();
             }
 
             if (item.getBouquetId() != null) {
-
                 Bouquet bouquet = bouquetService.getById(item.getBouquetId());
-
                 name = bouquet.getName();
+                imagePath = bouquet.getImagePath();
             }
 
             if (item.getAccessoryId() != null) {
-
                 Accessory accessory = accessoryService.getById(item.getAccessoryId());
-
                 name = accessory.getName();
+                imagePath = accessory.getImagePath();
             }
 
-            OrderLineViewModel vm =
-                    new OrderLineViewModel(item.getItemType(), name, item.getQuantity(), item.getPriceSnapshot());
+            OrderLineViewModel vm = new OrderLineViewModel(
+                  item.getItemType(),
+                  name,
+                  item.getQuantity(),
+                  item.getPriceSnapshot(),
+                  imagePath
+            );
 
             vm.setFlowerId(item.getFlowerId());
-
             vm.setBouquetId(item.getBouquetId());
-
             vm.setAccessoryId(item.getAccessoryId());
+            vm.setWorkspaceX(item.getWorkspaceX());
+            vm.setWorkspaceY(item.getWorkspaceY());
 
             orderItems.add(vm);
         }
@@ -194,11 +239,19 @@ public class CreateOrderViewModel {
         updateTotal();
     }
 
-    public void createOrder(String firstName, String lastName, String phone, String style, String preferredColor) {
+    public void createOrder(
+          String firstName,
+          String lastName,
+          String phone,
+          String style,
+          String preferredColor) {
+
         if (authService == null || authService.getCurrentUser() == null) {
             return;
         }
+
         Order order = new Order();
+
         order.setUserId(authService.getCurrentUser().getUserId());
         order.setCustomerFirstName(firstName);
         order.setCustomerLastName(lastName);
@@ -206,24 +259,39 @@ public class CreateOrderViewModel {
         order.setStyle(style);
         order.setPreferredColor(preferredColor);
         order.setBudget(new BigDecimal(totalText.get()));
+        order.setStatus(OrderStatus.NEW);
         order.setCreatedAt(LocalDateTime.now());
-        List<OrderItem> items = new ArrayList<>();
-        for (OrderLineViewModel vm : orderItems) {
-            OrderItem item = new OrderItem();
-            item.setItemType(vm.getItemType());
-            item.setQuantity(vm.getQuantity());
-            item.setPriceSnapshot(vm.getPrice());
-            item.setFlowerId(vm.getFlowerId());
-            item.setBouquetId(vm.getBouquetId());
-            item.setAccessoryId(vm.getAccessoryId());
-            items.add(item);
-        }
+
+        List<OrderItem> items = buildOrderItems();
+
         orderService.createOrder(order, items);
+
         orderItems.clear();
         updateTotal();
     }
 
     public void updateOrder(Order order) {
         orderService.update(order);
+    }
+
+    private List<OrderItem> buildOrderItems() {
+        List<OrderItem> items = new ArrayList<>();
+
+        for (OrderLineViewModel vm : orderItems) {
+            OrderItem item = new OrderItem();
+
+            item.setItemType(vm.getItemType());
+            item.setQuantity(vm.getQuantity());
+            item.setPriceSnapshot(vm.getPrice());
+            item.setFlowerId(vm.getFlowerId());
+            item.setBouquetId(vm.getBouquetId());
+            item.setAccessoryId(vm.getAccessoryId());
+            item.setWorkspaceX(vm.getWorkspaceX());
+            item.setWorkspaceY(vm.getWorkspaceY());
+
+            items.add(item);
+        }
+
+        return items;
     }
 }

@@ -1,5 +1,6 @@
 package com.fedelesh.flowersalon.domain.entity;
 
+import com.fedelesh.flowersalon.domain.enums.OrderStatus;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -14,20 +15,24 @@ public class Order {
     private BigDecimal budget;
     private String style;
     private String preferredColor;
+    private OrderStatus status;
     private LocalDateTime createdAt;
 
-    public Order() {}
+    public Order() {
+    }
 
     public Order(
-            UUID orderId,
-            UUID userId,
-            String customerFirstName,
-            String customerLastName,
-            String phone,
-            BigDecimal budget,
-            String style,
-            String preferredColor,
-            LocalDateTime createdAt) {
+          UUID orderId,
+          UUID userId,
+          String customerFirstName,
+          String customerLastName,
+          String phone,
+          BigDecimal budget,
+          String style,
+          String preferredColor,
+          OrderStatus status,
+          LocalDateTime createdAt) {
+
         this.orderId = orderId;
         this.userId = userId;
         this.customerFirstName = customerFirstName;
@@ -36,6 +41,7 @@ public class Order {
         this.budget = budget;
         this.style = style;
         this.preferredColor = preferredColor;
+        this.status = status;
         this.createdAt = createdAt;
     }
 
@@ -101,6 +107,14 @@ public class Order {
 
     public void setPreferredColor(String preferredColor) {
         this.preferredColor = preferredColor;
+    }
+
+    public OrderStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(OrderStatus status) {
+        this.status = status;
     }
 
     public LocalDateTime getCreatedAt() {

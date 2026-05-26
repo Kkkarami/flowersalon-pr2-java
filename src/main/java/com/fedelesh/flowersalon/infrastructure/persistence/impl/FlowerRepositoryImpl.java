@@ -25,13 +25,20 @@ public class FlowerRepositoryImpl extends BaseRepository<Flower> implements Flow
 
     @Override
     protected Flower map(ResultSet rs) throws SQLException {
+        UUID createdBy = null;
+
+        if (rs.getString("created_by") != null) {
+            createdBy = UUID.fromString(rs.getString("created_by"));
+        }
+
         return new Flower(
-                UUID.fromString(rs.getString("flower_id")),
-                rs.getString("name"),
-                rs.getString("color"),
-                rs.getBigDecimal("price"),
-                rs.getInt("stock_quantity"),
-                rs.getString("created_by") != null ? UUID.fromString(rs.getString("created_by")) : null);
+              UUID.fromString(rs.getString("flower_id")),
+              rs.getString("name"),
+              rs.getString("color"),
+              rs.getBigDecimal("price"),
+              rs.getInt("stock_quantity"),
+              createdBy,
+              rs.getString("image_path"));
     }
 
     @Override
@@ -41,7 +48,14 @@ public class FlowerRepositoryImpl extends BaseRepository<Flower> implements Flow
         stmt.setString(3, f.getColor());
         stmt.setBigDecimal(4, f.getPrice());
         stmt.setInt(5, f.getStockQuantity());
-        stmt.setString(6, f.getCreatedBy() != null ? f.getCreatedBy().toString() : null);
+
+        if (f.getCreatedBy() != null) {
+            stmt.setString(6, f.getCreatedBy().toString());
+        } else {
+            stmt.setString(6, null);
+        }
+
+        stmt.setString(7, f.getImagePath());
     }
 
     @Override
@@ -50,7 +64,8 @@ public class FlowerRepositoryImpl extends BaseRepository<Flower> implements Flow
         stmt.setString(2, f.getColor());
         stmt.setBigDecimal(3, f.getPrice());
         stmt.setInt(4, f.getStockQuantity());
-        stmt.setString(5, f.getFlowerId().toString());
+        stmt.setString(5, f.getImagePath());
+        stmt.setString(6, f.getFlowerId().toString());
     }
 
     @Override
@@ -60,12 +75,12 @@ public class FlowerRepositoryImpl extends BaseRepository<Flower> implements Flow
 
     @Override
     protected String insertSql() {
-        return "INSERT INTO Flowers (flower_id, name, color, price, stock_quantity, created_by) VALUES (?, ?, ?, ?, ?, ?)";
+        return "INSERT INTO Flowers (flower_id, name, color, price, stock_quantity, created_by, image_path) VALUES (?, ?, ?, ?, ?, ?, ?)";
     }
 
     @Override
     protected String updateSql() {
-        return "UPDATE Flowers SET name=?, color=?, price=?, stock_quantity=? WHERE flower_id=?";
+        return "UPDATE Flowers SET name=?, color=?, price=?, stock_quantity=?, image_path=? WHERE flower_id=?";
     }
 
     @Override

@@ -23,31 +23,46 @@ public class BouquetRepositoryImpl extends BaseRepository<Bouquet> implements Bo
 
     @Override
     protected Bouquet map(ResultSet rs) throws SQLException {
+        UUID createdBy = null;
+
+        if (rs.getString("created_by") != null) {
+            createdBy = UUID.fromString(rs.getString("created_by"));
+        }
+
         return new Bouquet(
-                UUID.fromString(rs.getString("bouquet_id")),
-                rs.getString("name"),
-                rs.getString("description"),
-                rs.getBoolean("is_custom"),
-                rs.getTimestamp("created_at").toLocalDateTime(),
-                rs.getString("created_by") != null ? UUID.fromString(rs.getString("created_by")) : null);
+              UUID.fromString(rs.getString("bouquet_id")),
+              rs.getString("name"),
+              rs.getString("description"),
+              rs.getBoolean("is_custom"),
+              rs.getTimestamp("created_at").toLocalDateTime(),
+              createdBy,
+              rs.getString("image_path"));
     }
 
     @Override
-    protected void setInsertParams(PreparedStatement stmt, Bouquet b) throws SQLException {
-        stmt.setString(1, b.getBouquetId().toString());
-        stmt.setString(2, b.getName());
-        stmt.setString(3, b.getDescription());
-        stmt.setBoolean(4, b.isCustom());
-        stmt.setTimestamp(5, Timestamp.valueOf(b.getCreatedAt()));
-        stmt.setString(6, b.getCreatedBy() != null ? b.getCreatedBy().toString() : null);
+    protected void setInsertParams(PreparedStatement stmt, Bouquet bouquet) throws SQLException {
+        stmt.setString(1, bouquet.getBouquetId().toString());
+        stmt.setString(2, bouquet.getName());
+        stmt.setString(3, bouquet.getDescription());
+        stmt.setBoolean(4, bouquet.isCustom());
+        stmt.setTimestamp(5, Timestamp.valueOf(bouquet.getCreatedAt()));
+
+        if (bouquet.getCreatedBy() != null) {
+            stmt.setString(6, bouquet.getCreatedBy().toString());
+        } else {
+            stmt.setString(6, null);
+        }
+
+        stmt.setString(7, bouquet.getImagePath());
     }
 
     @Override
-    protected void setUpdateParams(PreparedStatement stmt, Bouquet b) throws SQLException {
-        stmt.setString(1, b.getName());
-        stmt.setString(2, b.getDescription());
-        stmt.setBoolean(3, b.isCustom());
-        stmt.setString(4, b.getBouquetId().toString());
+    protected void setUpdateParams(PreparedStatement stmt, Bouquet bouquet) throws SQLException {
+        stmt.setString(1, bouquet.getName());
+        stmt.setString(2, bouquet.getDescription());
+        stmt.setBoolean(3, bouquet.isCustom());
+        stmt.setString(4, bouquet.getImagePath());
+        stmt.setString(5, bouquet.getBouquetId().toString());
     }
 
     @Override
@@ -57,11 +72,11 @@ public class BouquetRepositoryImpl extends BaseRepository<Bouquet> implements Bo
 
     @Override
     protected String insertSql() {
-        return "INSERT INTO Bouquets (bouquet_id, name, description, is_custom, created_at, created_by) VALUES (?, ?, ?, ?, ?, ?)";
+        return "INSERT INTO Bouquets (bouquet_id, name, description, is_custom, created_at, created_by, image_path) VALUES (?, ?, ?, ?, ?, ?, ?)";
     }
 
     @Override
     protected String updateSql() {
-        return "UPDATE Bouquets SET name=?, description=?, is_custom=? WHERE bouquet_id=?";
+        return "UPDATE Bouquets SET name=?, description=?, is_custom=?, image_path=? WHERE bouquet_id=?";
     }
 }

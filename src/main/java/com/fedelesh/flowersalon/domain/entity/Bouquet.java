@@ -8,25 +8,30 @@ public class Bouquet {
     private UUID bouquetId;
     private String name;
     private String description;
-    private boolean isCustom;
+    private boolean custom;
     private LocalDateTime createdAt;
     private UUID createdBy;
+    private String imagePath;
 
-    public Bouquet() {}
+    public Bouquet() {
+    }
 
     public Bouquet(
-            UUID bouquetId,
-            String name,
-            String description,
-            boolean isCustom,
-            LocalDateTime createdAt,
-            UUID createdBy) {
+          UUID bouquetId,
+          String name,
+          String description,
+          boolean custom,
+          LocalDateTime createdAt,
+          UUID createdBy,
+          String imagePath) {
+
         this.bouquetId = bouquetId;
         this.name = name;
         this.description = description;
-        this.isCustom = isCustom;
+        this.custom = custom;
         this.createdAt = createdAt;
         this.createdBy = createdBy;
+        this.imagePath = imagePath;
     }
 
     public UUID getBouquetId() {
@@ -54,11 +59,11 @@ public class Bouquet {
     }
 
     public boolean isCustom() {
-        return isCustom;
+        return custom;
     }
 
     public void setCustom(boolean custom) {
-        isCustom = custom;
+        this.custom = custom;
     }
 
     public LocalDateTime getCreatedAt() {
@@ -75,5 +80,13 @@ public class Bouquet {
 
     public void setCreatedBy(UUID createdBy) {
         this.createdBy = createdBy;
+    }
+
+    public String getImagePath() {
+        return imagePath;
+    }
+
+    public void setImagePath(String imagePath) {
+        this.imagePath = imagePath;
     }
 }

@@ -12,22 +12,27 @@ public class Accessory {
     private String color;
     private BigDecimal price;
     private int stockQuantity;
+    private String imagePath;
 
-    public Accessory() {}
+    public Accessory() {
+    }
 
     public Accessory(
-            UUID accessoryId,
-            String name,
-            AccessoryType accessoryType,
-            String color,
-            BigDecimal price,
-            int stockQuantity) {
+          UUID accessoryId,
+          String name,
+          AccessoryType accessoryType,
+          String color,
+          BigDecimal price,
+          int stockQuantity,
+          String imagePath) {
+
         this.accessoryId = accessoryId;
         this.name = name;
         this.accessoryType = accessoryType;
         this.color = color;
         this.price = price;
         this.stockQuantity = stockQuantity;
+        this.imagePath = imagePath;
     }
 
     public UUID getAccessoryId() {
@@ -76,5 +81,13 @@ public class Accessory {
 
     public void setStockQuantity(int stockQuantity) {
         this.stockQuantity = stockQuantity;
+    }
+
+    public String getImagePath() {
+        return imagePath;
+    }
+
+    public void setImagePath(String imagePath) {
+        this.imagePath = imagePath;
     }
 }

@@ -13,18 +13,23 @@ public class OrderItem {
     private UUID accessoryId;
     private int quantity;
     private BigDecimal priceSnapshot;
+    private double workspaceX;
+    private double workspaceY;
 
-    public OrderItem() {}
+    public OrderItem() {
+    }
 
     public OrderItem(
-            UUID orderItemId,
-            UUID orderId,
-            String itemType,
-            UUID flowerId,
-            UUID bouquetId,
-            UUID accessoryId,
-            int quantity,
-            BigDecimal priceSnapshot) {
+          UUID orderItemId,
+          UUID orderId,
+          String itemType,
+          UUID flowerId,
+          UUID bouquetId,
+          UUID accessoryId,
+          int quantity,
+          BigDecimal priceSnapshot,
+          double workspaceX,
+          double workspaceY) {
 
         this.orderItemId = orderItemId;
         this.orderId = orderId;
@@ -34,6 +39,8 @@ public class OrderItem {
         this.accessoryId = accessoryId;
         this.quantity = quantity;
         this.priceSnapshot = priceSnapshot;
+        this.workspaceX = workspaceX;
+        this.workspaceY = workspaceY;
     }
 
     public UUID getOrderItemId() {
@@ -98,5 +105,21 @@ public class OrderItem {
 
     public void setPriceSnapshot(BigDecimal priceSnapshot) {
         this.priceSnapshot = priceSnapshot;
+    }
+
+    public double getWorkspaceX() {
+        return workspaceX;
+    }
+
+    public void setWorkspaceX(double workspaceX) {
+        this.workspaceX = workspaceX;
+    }
+
+    public double getWorkspaceY() {
+        return workspaceY;
+    }
+
+    public void setWorkspaceY(double workspaceY) {
+        this.workspaceY = workspaceY;
     }
 }

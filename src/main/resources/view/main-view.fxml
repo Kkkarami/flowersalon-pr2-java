@@ -8,18 +8,15 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
+
 <BorderPane xmlns:fx="http://javafx.com/fxml/1"
   xmlns="http://javafx.com/javafx/21"
   fx:controller="com.fedelesh.flowersalon.presentation.controller.MainController"
   fx:id="mainContainer">
 
   <center>
-
     <VBox spacing="10">
-
-      <HBox alignment="CENTER_RIGHT"
-        spacing="10">
-
+      <HBox alignment="CENTER_RIGHT" spacing="10">
         <Button managed="false"
           onAction="#openCreateOrderWindow"
           text="Create Order"
@@ -38,50 +35,33 @@
           visible="false"
           fx:id="deleteOrderButton"/>
 
-        <Pane HBox.hgrow="ALWAYS"/>
+        <Button managed="false"
+          onAction="#handlePickUpOrder"
+          text="Оплатити / Забрати"
+          visible="false"
+          fx:id="pickUpOrderButton"/>
 
+        <Pane HBox.hgrow="ALWAYS"/>
       </HBox>
 
-      <TableView VBox.vgrow="ALWAYS"
-        fx:id="mainTableView"/>
+      <TableView VBox.vgrow="ALWAYS" fx:id="mainTableView"/>
 
       <padding>
-        <Insets bottom="15"
-          left="15"
-          right="15"
-          top="15"/>
+        <Insets bottom="15" left="15" right="15" top="15"/>
       </padding>
-
     </VBox>
-
   </center>
 
   <top>
-
     <ToolBar>
-
-      <Button onAction="#showFlowers"
-        text="Flowers"/>
-
-      <Button onAction="#showBouquets"
-        text="Bouquets"/>
-
-      <Button onAction="#showAccessories"
-        text="Accessories"/>
-
-      <Button onAction="#showUsers"
-        text="Users"/>
-
-      <Button onAction="#showOrders"
-        text="Orders"/>
-
-      <Button onAction="#handleLogout"
-        text="Logout"/>
-
+      <Button onAction="#showFlowers" text="Flowers"/>
+      <Button onAction="#showBouquets" text="Bouquets"/>
+      <Button onAction="#showAccessories" text="Accessories"/>
+      <Button onAction="#showUsers" text="Users"/>
+      <Button onAction="#showOrders" text="Orders"/>
+      <Button onAction="#handleLogout" text="Logout"/>
       <Pane HBox.hgrow="ALWAYS"/>
-
     </ToolBar>
-
   </top>
 
 </BorderPane>

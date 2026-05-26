@@ -11,16 +11,18 @@ public class Flower {
     private BigDecimal price;
     private int stockQuantity;
     private UUID createdBy;
+    private String imagePath;
 
     public Flower() {}
 
-    public Flower(UUID flowerId, String name, String color, BigDecimal price, int stockQuantity, UUID createdBy) {
+    public Flower(UUID flowerId, String name, String color, BigDecimal price, int stockQuantity, UUID createdBy, String imagePath) {
         this.flowerId = flowerId;
         this.name = name;
         this.color = color;
         this.price = price;
         this.stockQuantity = stockQuantity;
         this.createdBy = createdBy;
+        this.imagePath = imagePath;
     }
 
     public UUID getFlowerId() {
@@ -69,5 +71,13 @@ public class Flower {
 
     public void setCreatedBy(UUID createdBy) {
         this.createdBy = createdBy;
+    }
+
+    public String getImagePath() {
+        return imagePath;
+    }
+
+    public void setImagePath(String imagePath) {
+        this.imagePath = imagePath;
     }
 }
