@@ -160,12 +160,68 @@ public class MainController {
               TableUtils.column("Прізвище", "lastName"),
               TableUtils.column("Email", "email"),
               TableUtils.column("Телефон", "phone"),
-              TableUtils.column("Роль", "role"),
+              roleColumn(),
               TableUtils.column("Дата", "createdAt")
         );
 
         mainTableView.setFixedCellSize(45);
         mainTableView.setItems(FXCollections.observableArrayList(userService.getAll()));
+    }
+
+    private TableColumn<User, Role> roleColumn() {
+        TableColumn<User, Role> column = new TableColumn<>("Роль");
+
+        column.setCellValueFactory(cellData -> new SimpleObjectProperty<>(
+              cellData.getValue().getRole()
+        ));
+
+        column.setCellFactory(value -> new TableCell<>() {
+
+            private final ComboBox<Role> comboBox = new ComboBox<>(
+                  FXCollections.observableArrayList(Role.CLIENT, Role.FLORIST)
+            );
+
+            @Override
+            protected void updateItem(Role role, boolean empty) {
+                super.updateItem(role, empty);
+
+                if (empty || getTableRow() == null || getTableRow().getItem() == null) {
+                    setGraphic(null);
+                    return;
+                }
+
+                User targetUser = getTableRow().getItem();
+                User currentUser = MainApplication.authService.getCurrentUser();
+
+                comboBox.setValue(targetUser.getRole());
+
+                boolean disabled = true;
+
+                if (currentUser != null && currentUser.getRole() == Role.ADMIN) {
+                    if (targetUser.getRole() != Role.ADMIN) {
+                        disabled = false;
+                    }
+                }
+
+                comboBox.setDisable(disabled);
+
+                comboBox.setOnAction(event -> {
+                    Role selectedRole = comboBox.getValue();
+
+                    if (selectedRole == null) {
+                        return;
+                    }
+
+                    userService.changeRole(targetUser, selectedRole, MainApplication.authService.getCurrentUser());
+
+                    mainTableView.refresh();
+                });
+
+                setGraphic(comboBox);
+            }
+        });
+
+        return column;
     }
 
     @FXML
