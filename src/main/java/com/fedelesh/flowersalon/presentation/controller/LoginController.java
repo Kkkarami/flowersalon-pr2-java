@@ -2,6 +2,7 @@ package com.fedelesh.flowersalon.presentation.controller;
 
 import com.fedelesh.flowersalon.presentation.MainApplication;
 import com.fedelesh.flowersalon.presentation.viewmodel.LoginViewModel;
+import com.google.inject.Inject;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
@@ -9,7 +10,7 @@ import javafx.scene.control.TextField;
 
 public class LoginController {
 
-    private LoginViewModel viewModel;
+    private final LoginViewModel viewModel;
 
     @FXML
     private TextField emailField;
@@ -20,15 +21,9 @@ public class LoginController {
     @FXML
     private Label errorLabel;
 
-    public void setViewModel(LoginViewModel viewModel) {
+    @Inject
+    public LoginController(LoginViewModel viewModel) {
         this.viewModel = viewModel;
-    }
-
-    @FXML
-    public void initialize() {
-        if (MainApplication.authService != null) {
-            viewModel = new LoginViewModel(MainApplication.authService);
-        }
     }
 
     private void openMain() {
@@ -45,7 +40,6 @@ public class LoginController {
             if (success) {
                 openMain();
             }
-
         } catch (Exception e) {
             errorLabel.setText("Неправильний логін або пароль");
         }

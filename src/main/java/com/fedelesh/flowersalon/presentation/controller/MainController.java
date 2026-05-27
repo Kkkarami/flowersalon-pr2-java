@@ -1,28 +1,18 @@
 package com.fedelesh.flowersalon.presentation.controller;
 
 import com.fedelesh.flowersalon.application.contract.AccessoryService;
+import com.fedelesh.flowersalon.application.contract.AuthService;
 import com.fedelesh.flowersalon.application.contract.BouquetService;
 import com.fedelesh.flowersalon.application.contract.FlowerService;
 import com.fedelesh.flowersalon.application.contract.OrderService;
 import com.fedelesh.flowersalon.application.contract.UserService;
-import com.fedelesh.flowersalon.application.impl.AccessoryServiceImpl;
-import com.fedelesh.flowersalon.application.impl.BouquetServiceImpl;
-import com.fedelesh.flowersalon.application.impl.FlowerServiceImpl;
-import com.fedelesh.flowersalon.application.impl.OrderServiceImpl;
-import com.fedelesh.flowersalon.application.impl.UserServiceImpl;
 import com.fedelesh.flowersalon.domain.entity.Order;
 import com.fedelesh.flowersalon.domain.entity.User;
 import com.fedelesh.flowersalon.domain.enums.OrderStatus;
 import com.fedelesh.flowersalon.domain.enums.Role;
-import com.fedelesh.flowersalon.infrastructure.persistence.impl.AccessoryRepositoryImpl;
-import com.fedelesh.flowersalon.infrastructure.persistence.impl.BouquetRepositoryImpl;
-import com.fedelesh.flowersalon.infrastructure.persistence.impl.FlowerRepositoryImpl;
-import com.fedelesh.flowersalon.infrastructure.persistence.impl.OrderItemRepositoryImpl;
-import com.fedelesh.flowersalon.infrastructure.persistence.impl.OrderRepositoryImpl;
-import com.fedelesh.flowersalon.infrastructure.persistence.impl.UserRepositoryImpl;
 import com.fedelesh.flowersalon.presentation.MainApplication;
 import com.fedelesh.flowersalon.presentation.util.TableUtils;
-import com.fedelesh.flowersalon.presentation.viewmodel.LoginViewModel;
+import com.google.inject.Inject;
 import javafx.application.Platform;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
@@ -35,15 +25,12 @@ import javafx.scene.control.TableView;
 
 public class MainController {
 
-    private final UserService userService = new UserServiceImpl(new UserRepositoryImpl());
-    private final FlowerService flowerService = new FlowerServiceImpl(new FlowerRepositoryImpl());
-    private final BouquetService bouquetService = new BouquetServiceImpl(new BouquetRepositoryImpl());
-    private final AccessoryService accessoryService = new AccessoryServiceImpl(new AccessoryRepositoryImpl());
-
-    private final OrderService orderService = new OrderServiceImpl(
-          new OrderRepositoryImpl(),
-          new OrderItemRepositoryImpl()
-    );
+    private final AuthService authService;
+    private final UserService userService;
+    private final FlowerService flowerService;
+    private final BouquetService bouquetService;
+    private final AccessoryService accessoryService;
+    private final OrderService orderService;
 
     @FXML
     private TableView mainTableView;
@@ -59,6 +46,23 @@ public class MainController {
 
     @FXML
     private Button pickUpOrderButton;
+
+    @Inject
+    public MainController(
+          AuthService authService,
+          UserService userService,
+          FlowerService flowerService,
+          BouquetService bouquetService,
+          AccessoryService accessoryService,
+          OrderService orderService) {
+
+        this.authService = authService;
+        this.userService = userService;
+        this.flowerService = flowerService;
+        this.bouquetService = bouquetService;
+        this.accessoryService = accessoryService;
+        this.orderService = orderService;
+    }
 
     @FXML
     public void initialize() {
@@ -178,7 +182,10 @@ public class MainController {
         column.setCellFactory(value -> new TableCell<>() {
 
             private final ComboBox<Role> comboBox = new ComboBox<>(
-                  FXCollections.observableArrayList(Role.CLIENT, Role.FLORIST)
+                  FXCollections.observableArrayList(
+                        Role.CLIENT,
+                        Role.FLORIST
+                  )
             );
 
             @Override
@@ -191,7 +198,7 @@ public class MainController {
                 }
 
                 User targetUser = getTableRow().getItem();
-                User currentUser = MainApplication.authService.getCurrentUser();
+                User currentUser = authService.getCurrentUser();
 
                 comboBox.setValue(targetUser.getRole());
 
@@ -212,7 +219,7 @@ public class MainController {
                         return;
                     }
 
-                    userService.changeRole(targetUser, selectedRole, MainApplication.authService.getCurrentUser());
+                    userService.changeRole(targetUser, selectedRole, authService.getCurrentUser());
 
                     mainTableView.refresh();
                 });
@@ -242,7 +249,7 @@ public class MainController {
 
         mainTableView.setFixedCellSize(45);
 
-        User currentUser = MainApplication.authService.getCurrentUser();
+        User currentUser = authService.getCurrentUser();
 
         if (currentUser != null && currentUser.getRole() == Role.CLIENT) {
             mainTableView.setItems(FXCollections.observableArrayList(
@@ -258,7 +265,7 @@ public class MainController {
     }
 
     private void showAllowedOrderButtons() {
-        User currentUser = MainApplication.authService.getCurrentUser();
+        User currentUser = authService.getCurrentUser();
 
         if (currentUser == null) {
             return;
@@ -335,7 +342,7 @@ public class MainController {
     }
 
     private boolean canCurrentUserChangeStatus() {
-        User currentUser = MainApplication.authService.getCurrentUser();
+        User currentUser = authService.getCurrentUser();
 
         if (currentUser == null) {
             return false;
@@ -352,7 +359,7 @@ public class MainController {
         pickUpOrderButton.setVisible(false);
         pickUpOrderButton.setManaged(false);
 
-        User currentUser = MainApplication.authService.getCurrentUser();
+        User currentUser = authService.getCurrentUser();
 
         if (currentUser == null) {
             return;
@@ -420,7 +427,7 @@ public class MainController {
     }
 
     private boolean canEditOrder(Order order) {
-        User currentUser = MainApplication.authService.getCurrentUser();
+        User currentUser = authService.getCurrentUser();
 
         if (currentUser == null || order == null) {
             return false;
@@ -446,7 +453,7 @@ public class MainController {
     }
 
     private boolean canDeleteOrder(Order order) {
-        User currentUser = MainApplication.authService.getCurrentUser();
+        User currentUser = authService.getCurrentUser();
 
         if (currentUser == null || order == null) {
             return false;
@@ -490,7 +497,8 @@ public class MainController {
 
     @FXML
     private void handleLogout() {
-        new LoginViewModel(MainApplication.authService);
+        authService.logout();
+
         MainApplication.sceneManager.switchSceneMaximized("/view/login-view.fxml", "Login");
     }
 }

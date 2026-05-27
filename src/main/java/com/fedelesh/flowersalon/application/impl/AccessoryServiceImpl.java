@@ -6,6 +6,7 @@ import com.fedelesh.flowersalon.domain.entity.Accessory;
 import com.fedelesh.flowersalon.domain.entity.User;
 import com.fedelesh.flowersalon.domain.enums.Role;
 import com.fedelesh.flowersalon.infrastructure.persistence.contract.AccessoryRepository;
+import com.google.inject.Inject;
 import java.util.List;
 import java.util.UUID;
 
@@ -13,6 +14,7 @@ public class AccessoryServiceImpl implements AccessoryService {
 
     private final AccessoryRepository accessoryRepository;
 
+    @Inject
     public AccessoryServiceImpl(AccessoryRepository accessoryRepository) {
         this.accessoryRepository = accessoryRepository;
     }

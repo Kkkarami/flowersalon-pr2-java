@@ -10,6 +10,8 @@
 <?import javafx.scene.layout.VBox?>
 
 <BorderPane xmlns:fx="http://javafx.com/fxml/1"
+  prefHeight="720"
+  prefWidth="1200"
   xmlns="http://javafx.com/javafx/21"
   fx:controller="com.fedelesh.flowersalon.presentation.controller.MainController"
   fx:id="mainContainer">

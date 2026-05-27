@@ -4,12 +4,14 @@ import com.fedelesh.flowersalon.application.contract.UserService;
 import com.fedelesh.flowersalon.domain.entity.User;
 import com.fedelesh.flowersalon.domain.enums.Role;
 import com.fedelesh.flowersalon.infrastructure.persistence.contract.UserRepository;
+import com.google.inject.Inject;
 import java.util.List;
 
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
 
+    @Inject
     public UserServiceImpl(UserRepository userRepository) {
         this.userRepository = userRepository;
     }

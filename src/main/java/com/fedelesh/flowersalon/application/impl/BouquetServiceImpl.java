@@ -6,6 +6,7 @@ import com.fedelesh.flowersalon.domain.entity.Bouquet;
 import com.fedelesh.flowersalon.domain.entity.User;
 import com.fedelesh.flowersalon.domain.enums.Role;
 import com.fedelesh.flowersalon.infrastructure.persistence.contract.BouquetRepository;
+import com.google.inject.Inject;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
@@ -14,6 +15,7 @@ public class BouquetServiceImpl implements BouquetService {
 
     private final BouquetRepository bouquetRepository;
 
+    @Inject
     public BouquetServiceImpl(BouquetRepository bouquetRepository) {
         this.bouquetRepository = bouquetRepository;
     }

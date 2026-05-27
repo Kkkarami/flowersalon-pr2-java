@@ -6,6 +6,7 @@ import com.fedelesh.flowersalon.domain.entity.Flower;
 import com.fedelesh.flowersalon.domain.entity.User;
 import com.fedelesh.flowersalon.domain.enums.Role;
 import com.fedelesh.flowersalon.infrastructure.persistence.contract.FlowerRepository;
+import com.google.inject.Inject;
 import java.util.List;
 import java.util.UUID;
 
@@ -13,6 +14,7 @@ public class FlowerServiceImpl implements FlowerService {
 
     private final FlowerRepository flowerRepository;
 
+    @Inject
     public FlowerServiceImpl(FlowerRepository flowerRepository) {
         this.flowerRepository = flowerRepository;
     }

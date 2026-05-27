@@ -5,6 +5,7 @@ import com.fedelesh.flowersalon.domain.entity.Order;
 import com.fedelesh.flowersalon.domain.entity.OrderItem;
 import com.fedelesh.flowersalon.infrastructure.persistence.contract.OrderItemRepository;
 import com.fedelesh.flowersalon.infrastructure.persistence.contract.OrderRepository;
+import com.google.inject.Inject;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -15,6 +16,7 @@ public class OrderServiceImpl implements OrderService {
     private final OrderRepository orderRepository;
     private final OrderItemRepository orderItemRepository;
 
+    @Inject
     public OrderServiceImpl(OrderRepository orderRepository, OrderItemRepository orderItemRepository) {
         this.orderRepository = orderRepository;
         this.orderItemRepository = orderItemRepository;

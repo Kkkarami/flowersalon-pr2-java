@@ -7,6 +7,7 @@ import com.fedelesh.flowersalon.domain.enums.Role;
 import com.fedelesh.flowersalon.infrastructure.email.EmailSender;
 import com.fedelesh.flowersalon.infrastructure.persistence.contract.UserRepository;
 import com.fedelesh.flowersalon.infrastructure.security.PasswordHasher;
+import com.google.inject.Inject;
 import java.time.LocalDateTime;
 import java.util.Random;
 import java.util.UUID;
@@ -23,6 +24,7 @@ public class SignUpServiceImpl implements SignUpService {
     private String emailForCode;
     private LocalDateTime createdAt;
 
+    @Inject
     public SignUpServiceImpl(UserRepository userRepository, PasswordHasher passwordHasher, EmailSender emailSender) {
         this.userRepository = userRepository;
         this.passwordHasher = passwordHasher;

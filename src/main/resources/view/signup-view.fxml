@@ -13,7 +13,9 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.text.Font?>
-<StackPane xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/21"
+<StackPane xmlns:fx="http://javafx.com/fxml/1" prefHeight="620"
+  prefWidth="500"
+  xmlns="http://javafx.com/javafx/21"
   fx:controller="com.fedelesh.flowersalon.presentation.controller.SignUpController">
 
   <GridPane alignment="CENTER" hgap="10" maxWidth="500" vgap="4">

@@ -7,6 +7,7 @@ import com.fedelesh.flowersalon.domain.entity.Order;
 import com.fedelesh.flowersalon.presentation.MainApplication;
 import com.fedelesh.flowersalon.presentation.viewmodel.CreateOrderViewModel;
 import com.fedelesh.flowersalon.presentation.viewmodel.OrderLineViewModel;
+import com.google.inject.Inject;
 import java.io.InputStream;
 import java.math.BigDecimal;
 import javafx.fxml.FXML;
@@ -25,7 +26,8 @@ public class CreateOrderController {
 
     private static final double WORKSPACE_IMAGE_SIZE = 155;
 
-    private final CreateOrderViewModel viewModel = new CreateOrderViewModel(MainApplication.authService);
+    private final CreateOrderViewModel viewModel;
+
     private Order editingOrder;
 
     @FXML
@@ -111,6 +113,11 @@ public class CreateOrderController {
 
     @FXML
     private Button createOrderButton;
+
+    @Inject
+    public CreateOrderController(CreateOrderViewModel viewModel) {
+        this.viewModel = viewModel;
+    }
 
     @FXML
     public void initialize() {
@@ -233,7 +240,7 @@ public class CreateOrderController {
         makeDraggable(imageView, item);
 
         bouquetWorkspace.getChildren().add(imageView);
-        imageView.toBack();
+        imageView.toFront();
     }
 
     private double[] calculateAutoPosition(int index) {

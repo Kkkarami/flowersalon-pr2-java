@@ -6,6 +6,7 @@ import com.fedelesh.flowersalon.application.validation.ValidationHelper;
 import com.fedelesh.flowersalon.domain.entity.User;
 import com.fedelesh.flowersalon.infrastructure.persistence.contract.UserRepository;
 import com.fedelesh.flowersalon.infrastructure.security.PasswordHasher;
+import com.google.inject.Inject;
 
 public class AuthServiceImpl implements AuthService {
 
@@ -14,6 +15,7 @@ public class AuthServiceImpl implements AuthService {
 
     private User currentUser;
 
+    @Inject
     public AuthServiceImpl(UserRepository userRepository, PasswordHasher passwordHasher) {
         this.userRepository = userRepository;
         this.passwordHasher = passwordHasher;

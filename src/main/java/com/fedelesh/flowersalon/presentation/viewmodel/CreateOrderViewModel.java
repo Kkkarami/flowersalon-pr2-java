@@ -5,21 +5,13 @@ import com.fedelesh.flowersalon.application.contract.AuthService;
 import com.fedelesh.flowersalon.application.contract.BouquetService;
 import com.fedelesh.flowersalon.application.contract.FlowerService;
 import com.fedelesh.flowersalon.application.contract.OrderService;
-import com.fedelesh.flowersalon.application.impl.AccessoryServiceImpl;
-import com.fedelesh.flowersalon.application.impl.BouquetServiceImpl;
-import com.fedelesh.flowersalon.application.impl.FlowerServiceImpl;
-import com.fedelesh.flowersalon.application.impl.OrderServiceImpl;
 import com.fedelesh.flowersalon.domain.entity.Accessory;
 import com.fedelesh.flowersalon.domain.entity.Bouquet;
 import com.fedelesh.flowersalon.domain.entity.Flower;
 import com.fedelesh.flowersalon.domain.entity.Order;
 import com.fedelesh.flowersalon.domain.entity.OrderItem;
 import com.fedelesh.flowersalon.domain.enums.OrderStatus;
-import com.fedelesh.flowersalon.infrastructure.persistence.impl.AccessoryRepositoryImpl;
-import com.fedelesh.flowersalon.infrastructure.persistence.impl.BouquetRepositoryImpl;
-import com.fedelesh.flowersalon.infrastructure.persistence.impl.FlowerRepositoryImpl;
-import com.fedelesh.flowersalon.infrastructure.persistence.impl.OrderItemRepositoryImpl;
-import com.fedelesh.flowersalon.infrastructure.persistence.impl.OrderRepositoryImpl;
+import com.google.inject.Inject;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -44,13 +36,19 @@ public class CreateOrderViewModel {
 
     private final StringProperty totalText = new SimpleStringProperty("0");
 
-    public CreateOrderViewModel(AuthService authService) {
-        this.authService = authService;
+    @Inject
+    public CreateOrderViewModel(
+          AuthService authService,
+          FlowerService flowerService,
+          BouquetService bouquetService,
+          AccessoryService accessoryService,
+          OrderService orderService) {
 
-        flowerService = new FlowerServiceImpl(new FlowerRepositoryImpl());
-        bouquetService = new BouquetServiceImpl(new BouquetRepositoryImpl());
-        accessoryService = new AccessoryServiceImpl(new AccessoryRepositoryImpl());
-        orderService = new OrderServiceImpl(new OrderRepositoryImpl(), new OrderItemRepositoryImpl());
+        this.authService = authService;
+        this.flowerService = flowerService;
+        this.bouquetService = bouquetService;
+        this.accessoryService = accessoryService;
+        this.orderService = orderService;
 
         loadData();
     }
@@ -82,7 +80,11 @@ public class CreateOrderViewModel {
     }
 
     public String getCurrentUserFirstName() {
-        if (authService == null || authService.getCurrentUser() == null) {
+        if (authService == null) {
+            return "";
+        }
+
+        if (authService.getCurrentUser() == null) {
             return "";
         }
 
@@ -90,7 +92,11 @@ public class CreateOrderViewModel {
     }
 
     public String getCurrentUserLastName() {
-        if (authService == null || authService.getCurrentUser() == null) {
+        if (authService == null) {
+            return "";
+        }
+
+        if (authService.getCurrentUser() == null) {
             return "";
         }
 
@@ -98,7 +104,11 @@ public class CreateOrderViewModel {
     }
 
     public String getCurrentUserPhone() {
-        if (authService == null || authService.getCurrentUser() == null) {
+        if (authService == null) {
+            return "";
+        }
+
+        if (authService.getCurrentUser() == null) {
             return "";
         }
 
@@ -246,7 +256,11 @@ public class CreateOrderViewModel {
           String style,
           String preferredColor) {
 
-        if (authService == null || authService.getCurrentUser() == null) {
+        if (authService == null) {
+            return;
+        }
+
+        if (authService.getCurrentUser() == null) {
             return;
         }
 
@@ -271,6 +285,12 @@ public class CreateOrderViewModel {
     }
 
     public void updateOrder(Order order) {
+        if (order == null) {
+            return;
+        }
+
+        order.setBudget(new BigDecimal(totalText.get()));
+
         orderService.update(order);
     }
 
