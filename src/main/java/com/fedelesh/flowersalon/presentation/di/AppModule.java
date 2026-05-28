@@ -35,24 +35,24 @@ import com.google.inject.Singleton;
 
 public class AppModule extends AbstractModule {
 
-    @Override
-    protected void configure() {
-        bind(UserRepository.class).to(UserRepositoryImpl.class).in(Singleton.class);
-        bind(FlowerRepository.class).to(FlowerRepositoryImpl.class).in(Singleton.class);
-        bind(BouquetRepository.class).to(BouquetRepositoryImpl.class).in(Singleton.class);
-        bind(AccessoryRepository.class).to(AccessoryRepositoryImpl.class).in(Singleton.class);
-        bind(OrderRepository.class).to(OrderRepositoryImpl.class).in(Singleton.class);
-        bind(OrderItemRepository.class).to(OrderItemRepositoryImpl.class).in(Singleton.class);
+  @Override
+  protected void configure() {
+    bind(UserRepository.class).to(UserRepositoryImpl.class).in(Singleton.class);
+    bind(FlowerRepository.class).to(FlowerRepositoryImpl.class).in(Singleton.class);
+    bind(BouquetRepository.class).to(BouquetRepositoryImpl.class).in(Singleton.class);
+    bind(AccessoryRepository.class).to(AccessoryRepositoryImpl.class).in(Singleton.class);
+    bind(OrderRepository.class).to(OrderRepositoryImpl.class).in(Singleton.class);
+    bind(OrderItemRepository.class).to(OrderItemRepositoryImpl.class).in(Singleton.class);
 
-        bind(PasswordHasher.class).to(BcryptPasswordHasher.class).in(Singleton.class);
-        bind(EmailSender.class).to(SmtpEmailSender.class).in(Singleton.class);
+    bind(PasswordHasher.class).to(BcryptPasswordHasher.class).in(Singleton.class);
+    bind(EmailSender.class).to(SmtpEmailSender.class).in(Singleton.class);
 
-        bind(AuthService.class).to(AuthServiceImpl.class).in(Singleton.class);
-        bind(SignUpService.class).to(SignUpServiceImpl.class).in(Singleton.class);
-        bind(UserService.class).to(UserServiceImpl.class).in(Singleton.class);
-        bind(FlowerService.class).to(FlowerServiceImpl.class).in(Singleton.class);
-        bind(BouquetService.class).to(BouquetServiceImpl.class).in(Singleton.class);
-        bind(AccessoryService.class).to(AccessoryServiceImpl.class).in(Singleton.class);
-        bind(OrderService.class).to(OrderServiceImpl.class).in(Singleton.class);
-    }
+    bind(AuthService.class).to(AuthServiceImpl.class).in(Singleton.class);
+    bind(SignUpService.class).to(SignUpServiceImpl.class).in(Singleton.class);
+    bind(UserService.class).to(UserServiceImpl.class).in(Singleton.class);
+    bind(FlowerService.class).to(FlowerServiceImpl.class).in(Singleton.class);
+    bind(BouquetService.class).to(BouquetServiceImpl.class).in(Singleton.class);
+    bind(AccessoryService.class).to(AccessoryServiceImpl.class).in(Singleton.class);
+    bind(OrderService.class).to(OrderServiceImpl.class).in(Singleton.class);
+  }
 }

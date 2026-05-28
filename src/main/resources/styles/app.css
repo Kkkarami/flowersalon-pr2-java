@@ -1,0 +1,118 @@
+.root {
+  -fx-font-family: "Segoe UI";
+  -fx-background-color: #f7f3f0;
+}
+
+.page {
+  -fx-background-color: #f7f3f0;
+}
+
+.card {
+  -fx-background-color: white;
+  -fx-background-radius: 16;
+  -fx-border-radius: 16;
+  -fx-border-color: #eadfd8;
+  -fx-padding: 18;
+  -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.10), 18, 0.18, 0, 4);
+}
+
+.title {
+  -fx-font-size: 30px;
+  -fx-font-weight: bold;
+  -fx-text-fill: #3c2f2f;
+}
+
+.section-title {
+  -fx-font-size: 17px;
+  -fx-font-weight: bold;
+  -fx-text-fill: #4a3a3a;
+}
+
+.subtle-label {
+  -fx-text-fill: #7a6a6a;
+}
+
+.button {
+  -fx-background-radius: 12;
+  -fx-padding: 8 16;
+  -fx-font-weight: bold;
+  -fx-cursor: hand;
+}
+
+.primary-button {
+  -fx-background-color: #b85c70;
+  -fx-text-fill: white;
+}
+
+.primary-button:hover {
+  -fx-background-color: #a44f62;
+}
+
+.secondary-button {
+  -fx-background-color: #eadfd8;
+  -fx-text-fill: #3c2f2f;
+}
+
+.danger-button {
+  -fx-background-color: #d9534f;
+  -fx-text-fill: white;
+}
+
+.success-button {
+  -fx-background-color: #4f9d69;
+  -fx-text-fill: white;
+}
+
+.text-field,
+.password-field,
+.combo-box {
+  -fx-background-radius: 10;
+  -fx-border-radius: 10;
+  -fx-border-color: #d8c9c2;
+  -fx-background-color: white;
+  -fx-padding: 7 10;
+}
+
+.table-view {
+  -fx-background-radius: 14;
+  -fx-border-radius: 14;
+  -fx-border-color: #eadfd8;
+  -fx-background-color: white;
+}
+
+.table-view .column-header-background {
+  -fx-background-color: #eadfd8;
+  -fx-background-radius: 14 14 0 0;
+}
+
+.table-view .column-header,
+.table-view .filler {
+  -fx-background-color: transparent;
+}
+
+.table-row-cell:selected {
+  -fx-background-color: #f2c6cf;
+}
+
+.tool-bar {
+  -fx-background-color: white;
+  -fx-border-color: transparent transparent #eadfd8 transparent;
+  -fx-padding: 10 14;
+}
+
+.workspace {
+  -fx-background-color: white;
+  -fx-background-radius: 18;
+  -fx-border-radius: 18;
+  -fx-border-color: #eadfd8;
+  -fx-border-width: 1;
+  -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.08), 16, 0.15, 0, 3);
+}
+
+.total-box {
+  -fx-background-color: #fff4f6;
+  -fx-background-radius: 14;
+  -fx-padding: 12;
+  -fx-border-color: #f0c4cd;
+  -fx-border-radius: 14;
+}

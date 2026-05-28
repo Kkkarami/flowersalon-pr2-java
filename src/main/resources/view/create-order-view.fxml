@@ -17,6 +17,8 @@
 <BorderPane xmlns:fx="http://javafx.com/fxml/1"
   prefHeight="760"
   prefWidth="1300"
+  styleClass="page"
+  stylesheets="@/styles/app.css"
   xmlns="http://javafx.com/javafx/21"
   fx:controller="com.fedelesh.flowersalon.presentation.controller.CreateOrderController">
 
@@ -25,14 +27,14 @@
       <items>
 
         <VBox spacing="10">
-          <Button onAction="#handleBack" text="Back"/>
+          <Button onAction="#handleBack" styleClass="button,secondary-button" text="Back"/>
 
           <TabPane VBox.vgrow="ALWAYS">
             <tabs>
 
               <Tab closable="false" text="Flowers">
                 <VBox spacing="10">
-                  <Button onAction="#handleAddFlower" text="Add Flower"/>
+                  <Button onAction="#handleAddFlower" styleClass="button,primary-button" text="Add Flower"/>
 
                   <TableView VBox.vgrow="ALWAYS" fx:id="flowersTableView">
                     <columns>
@@ -47,13 +49,14 @@
 
               <Tab closable="false" text="Bouquets">
                 <VBox spacing="10">
-                  <Button onAction="#handleAddBouquet" text="Add Bouquet"/>
+                  <Button onAction="#handleAddBouquet" styleClass="button,primary-button" text="Add Bouquet"/>
 
                   <TableView VBox.vgrow="ALWAYS" fx:id="bouquetsTableView">
                     <columns>
                       <TableColumn prefWidth="80" text="Image" fx:id="bouquetImageColumn"/>
                       <TableColumn prefWidth="120" text="Name" fx:id="bouquetNameColumn"/>
                       <TableColumn prefWidth="220" text="Description" fx:id="bouquetDescriptionColumn"/>
+                      <TableColumn prefWidth="80" text="Price" fx:id="bouquetPriceColumn"/>
                     </columns>
                   </TableView>
                 </VBox>
@@ -61,7 +64,7 @@
 
               <Tab closable="false" text="Accessories">
                 <VBox spacing="10">
-                  <Button onAction="#handleAddAccessory" text="Add Accessory"/>
+                  <Button onAction="#handleAddAccessory" styleClass="button,primary-button" text="Add Accessory"/>
 
                   <TableView VBox.vgrow="ALWAYS" fx:id="accessoriesTableView">
                     <columns>
@@ -80,14 +83,15 @@
           <VBox spacing="8">
             <Button maxWidth="Infinity"
               onAction="#handleCreateOrder"
+              styleClass="button,primary-button"
               text="Create Order"
               fx:id="createOrderButton"/>
 
-            <HBox spacing="10">
-              <Label text="Total:"/>
+            <HBox spacing="10" styleClass="total-box">
+              <Label styleClass="subtle-label" text="Total:"/>
               <Label fx:id="totalLabel"/>
             </HBox>
-            <Label text="Customer Info"/>
+            <Label styleClass="section-title" text="Customer Info"/>
             <TextField promptText="Phone" fx:id="phoneField"/>
             <TextField promptText="Style" fx:id="styleField"/>
             <TextField promptText="Preferred Color" fx:id="colorField"/>
@@ -105,9 +109,10 @@
         <VBox spacing="10">
           <Button maxWidth="Infinity"
             onAction="#handleRemoveItem"
+            styleClass="button,danger-button"
             text="Remove Selected"/>
 
-          <Label text="Current Order"/>
+          <Label styleClass="section-title" text="Current Order"/>
 
           <TableView VBox.vgrow="ALWAYS" fx:id="orderItemsTableView">
             <columns>
@@ -125,12 +130,12 @@
         </VBox>
 
         <VBox spacing="10">
-          <Label text="Workspace"/>
+          <Label styleClass="section-title" text="Workspace"/>
 
-          <Pane style="-fx-background-color: white; -fx-border-color: #cccccc; -fx-border-width: 1;"
-            VBox.vgrow="ALWAYS"
+          <Pane VBox.vgrow="ALWAYS"
             prefHeight="600"
             prefWidth="350"
+            styleClass="workspace"
             fx:id="bouquetWorkspace"/>
 
           <padding>

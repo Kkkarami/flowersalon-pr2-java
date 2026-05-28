@@ -10,47 +10,48 @@ import com.google.inject.Inject;
 
 public class AuthServiceImpl implements AuthService {
 
-    private final UserRepository userRepository;
-    private final PasswordHasher passwordHasher;
+  private final UserRepository userRepository;
+  private final PasswordHasher passwordHasher;
 
-    private User currentUser;
+  private User currentUser;
 
-    @Inject
-    public AuthServiceImpl(UserRepository userRepository, PasswordHasher passwordHasher) {
-        this.userRepository = userRepository;
-        this.passwordHasher = passwordHasher;
+  @Inject
+  public AuthServiceImpl(UserRepository userRepository, PasswordHasher passwordHasher) {
+    this.userRepository = userRepository;
+    this.passwordHasher = passwordHasher;
+  }
+
+  @Override
+  public boolean authenticate(String email, String password) {
+
+    new ValidationHelper()
+        .notEmpty("email", email)
+        .validEmail("email", email)
+        .notEmpty("password", password)
+        .throwIfHasErrors();
+
+    User user =
+        userRepository
+            .findByEmail(email)
+            .orElseThrow(() -> new AuthenticationException("Неправильний логін або пароль"));
+
+    boolean valid = passwordHasher.verify(password, user.getPasswordHash());
+
+    if (!valid) {
+      throw new AuthenticationException("Неправильний логін або пароль");
     }
 
-    @Override
-    public boolean authenticate(String email, String password) {
+    currentUser = user;
+    return true;
+  }
 
-        new ValidationHelper()
-                .notEmpty("email", email)
-                .validEmail("email", email)
-                .notEmpty("password", password)
-                .throwIfHasErrors();
+  @Override
+  public User getCurrentUser() {
+    return currentUser;
+  }
 
-        User user = userRepository
-                .findByEmail(email)
-                .orElseThrow(() -> new AuthenticationException("Неправильний логін або пароль"));
-
-        boolean valid = passwordHasher.verify(password, user.getPasswordHash());
-
-        if (!valid) {
-            throw new AuthenticationException("Неправильний логін або пароль");
-        }
-
-        currentUser = user;
-        return true;
-    }
-
-    @Override
-    public User getCurrentUser() {
-        return currentUser;
-    }
-
-    @Override
-    public void logout() {
-        currentUser = null;
-    }
+  @Override
+  public void logout() {
+    currentUser = null;
+  }
 }

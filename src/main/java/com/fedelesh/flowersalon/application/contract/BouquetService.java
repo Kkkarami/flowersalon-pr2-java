@@ -7,13 +7,13 @@ import java.util.UUID;
 
 public interface BouquetService {
 
-    List<Bouquet> getAll();
+  List<Bouquet> getAll();
 
-    Bouquet getById(UUID id);
+  Bouquet getById(UUID id);
 
-    void create(Bouquet bouquet, User currentUser);
+  void create(Bouquet bouquet, User currentUser);
 
-    void update(Bouquet bouquet, User currentUser);
+  void update(Bouquet bouquet, User currentUser);
 
-    void delete(UUID id, User currentUser);
+  void delete(UUID id, User currentUser);
 }

@@ -10,19 +10,19 @@ import javafx.stage.Stage;
 
 public class MainApplication extends Application {
 
-    public static SceneManager sceneManager;
+  public static SceneManager sceneManager;
 
-    public static void main(String[] args) {
-        launch();
-    }
+  public static void main(String[] args) {
+    launch();
+  }
 
-    @Override
-    public void start(Stage stage) {
-        Application.setUserAgentStylesheet(new NordLight().getUserAgentStylesheet());
+  @Override
+  public void start(Stage stage) {
+    Application.setUserAgentStylesheet(new NordLight().getUserAgentStylesheet());
 
-        Injector injector = Guice.createInjector(new AppModule());
+    Injector injector = Guice.createInjector(new AppModule());
 
-        sceneManager = new SceneManager(stage, injector);
-        sceneManager.switchSceneMaximized("/view/login-view.fxml", "Login");
-    }
+    sceneManager = new SceneManager(stage, injector);
+    sceneManager.switchSceneMaximized("/view/login-view.fxml", "Login");
+  }
 }

@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface UserService {
 
-    List<User> getAll();
+  List<User> getAll();
 
-    void changeRole(User targetUser, Role newRole, User currentUser);
+  void changeRole(User targetUser, Role newRole, User currentUser);
 }

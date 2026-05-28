@@ -5,8 +5,8 @@ import javafx.application.Application;
 
 public class Launcher {
 
-    public static void main(String[] args) {
-        DatabaseInitializer.init();
-        Application.launch(MainApplication.class, args);
-    }
+  public static void main(String[] args) {
+    DatabaseInitializer.init();
+    Application.launch(MainApplication.class, args);
+  }
 }

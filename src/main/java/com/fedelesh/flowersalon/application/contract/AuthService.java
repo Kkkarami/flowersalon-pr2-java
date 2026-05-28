@@ -4,9 +4,9 @@ import com.fedelesh.flowersalon.domain.entity.User;
 
 public interface AuthService {
 
-    boolean authenticate(String email, String password);
+  boolean authenticate(String email, String password);
 
-    User getCurrentUser();
+  User getCurrentUser();
 
-    void logout();
+  void logout();
 }

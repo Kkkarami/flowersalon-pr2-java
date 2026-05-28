@@ -25,176 +25,212 @@ import javafx.scene.control.TableView;
 
 public class MainController {
 
-    private final AuthService authService;
-    private final UserService userService;
-    private final FlowerService flowerService;
-    private final BouquetService bouquetService;
-    private final AccessoryService accessoryService;
-    private final OrderService orderService;
+  private final AuthService authService;
+  private final UserService userService;
+  private final FlowerService flowerService;
+  private final BouquetService bouquetService;
+  private final AccessoryService accessoryService;
+  private final OrderService orderService;
 
-    @FXML
-    private TableView mainTableView;
+  @FXML private Button flowersTabButton;
 
-    @FXML
-    private Button createOrderButton;
+  @FXML private Button bouquetsTabButton;
 
-    @FXML
-    private Button editOrderButton;
+  @FXML private Button accessoriesTabButton;
 
-    @FXML
-    private Button deleteOrderButton;
+  @FXML private Button usersTabButton;
 
-    @FXML
-    private Button pickUpOrderButton;
+  @FXML private Button ordersTabButton;
 
-    @Inject
-    public MainController(
-          AuthService authService,
-          UserService userService,
-          FlowerService flowerService,
-          BouquetService bouquetService,
-          AccessoryService accessoryService,
-          OrderService orderService) {
+  @FXML private TableView mainTableView;
 
-        this.authService = authService;
-        this.userService = userService;
-        this.flowerService = flowerService;
-        this.bouquetService = bouquetService;
-        this.accessoryService = accessoryService;
-        this.orderService = orderService;
-    }
+  @FXML private Button createOrderButton;
 
-    @FXML
-    public void initialize() {
-        hideOrderButtons();
+  @FXML private Button editOrderButton;
 
-        createOrderButton.setOnAction(event -> openCreateOrderWindow());
+  @FXML private Button deleteOrderButton;
 
-        mainTableView.getSelectionModel().selectedItemProperty().addListener((obs, oldValue, newValue) -> {
+  @FXML private Button pickUpOrderButton;
+
+  @Inject
+  public MainController(
+      AuthService authService,
+      UserService userService,
+      FlowerService flowerService,
+      BouquetService bouquetService,
+      AccessoryService accessoryService,
+      OrderService orderService) {
+
+    this.authService = authService;
+    this.userService = userService;
+    this.flowerService = flowerService;
+    this.bouquetService = bouquetService;
+    this.accessoryService = accessoryService;
+    this.orderService = orderService;
+  }
+
+  @FXML
+  public void initialize() {
+    hideOrderButtons();
+
+    createOrderButton.setOnAction(event -> openCreateOrderWindow());
+
+    mainTableView
+        .getSelectionModel()
+        .selectedItemProperty()
+        .addListener(
+            (obs, oldValue, newValue) -> {
+              updatePickUpButtonVisibility();
+            });
+
+    mainTableView.setOnMouseClicked(
+        event -> {
+          if (event.getClickCount() == 2) {
             updatePickUpButtonVisibility();
+          }
         });
 
-        mainTableView.setOnMouseClicked(event -> {
-            if (event.getClickCount() == 2) {
-                updatePickUpButtonVisibility();
-            }
-        });
+    Platform.runLater(this::showFlowers);
+  }
 
-        Platform.runLater(this::showFlowers);
+  private void resetTable() {
+    mainTableView.getColumns().clear();
+    mainTableView.getItems().clear();
+
+    hideOrderButtons();
+  }
+
+  private void hideOrderButtons() {
+    createOrderButton.setVisible(false);
+    createOrderButton.setManaged(false);
+
+    editOrderButton.setVisible(false);
+    editOrderButton.setManaged(false);
+
+    deleteOrderButton.setVisible(false);
+    deleteOrderButton.setManaged(false);
+
+    pickUpOrderButton.setVisible(false);
+    pickUpOrderButton.setManaged(false);
+  }
+
+  private void setupTable(TableColumn<?, ?>... columns) {
+    resetTable();
+
+    mainTableView.getColumns().addAll(columns);
+    mainTableView.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+  }
+
+  private void setActiveTab(Button activeButton) {
+    clearActiveTab(flowersTabButton);
+    clearActiveTab(bouquetsTabButton);
+    clearActiveTab(accessoriesTabButton);
+    clearActiveTab(usersTabButton);
+    clearActiveTab(ordersTabButton);
+
+    if (activeButton != null) {
+      activeButton.getStyleClass().remove("secondary-button");
+
+      if (!activeButton.getStyleClass().contains("active-tab-button")) {
+        activeButton.getStyleClass().add("active-tab-button");
+      }
+    }
+  }
+
+  private void clearActiveTab(Button button) {
+    if (button == null) {
+      return;
     }
 
-    private void resetTable() {
-        mainTableView.getColumns().clear();
-        mainTableView.getItems().clear();
+    button.getStyleClass().remove("active-tab-button");
 
-        hideOrderButtons();
+    if (!button.getStyleClass().contains("secondary-button")) {
+      button.getStyleClass().add("secondary-button");
     }
+  }
 
-    private void hideOrderButtons() {
-        createOrderButton.setVisible(false);
-        createOrderButton.setManaged(false);
+  @FXML
+  public void showFlowers() {
+    setActiveTab(flowersTabButton);
+    setupTable(
+        TableUtils.imageColumn("Фото", "imagePath"),
+        TableUtils.column("ID", "flowerId"),
+        TableUtils.column("Назва", "name"),
+        TableUtils.column("Колір", "color"),
+        TableUtils.column("Ціна", "price"),
+        TableUtils.column("Кількість", "stockQuantity"));
 
-        editOrderButton.setVisible(false);
-        editOrderButton.setManaged(false);
+    mainTableView.setFixedCellSize(70);
+    mainTableView.setItems(FXCollections.observableArrayList(flowerService.getAll()));
+  }
 
-        deleteOrderButton.setVisible(false);
-        deleteOrderButton.setManaged(false);
+  @FXML
+  public void showBouquets() {
+    setActiveTab(bouquetsTabButton);
+    setupTable(
+        TableUtils.imageColumn("Фото", "imagePath"),
+        TableUtils.column("ID", "bouquetId"),
+        TableUtils.column("Назва", "name"),
+        TableUtils.column("Опис", "description"),
+        TableUtils.column("Ціна", "price"),
+        TableUtils.column("Custom", "custom"),
+        TableUtils.column("Дата", "createdAt"));
 
-        pickUpOrderButton.setVisible(false);
-        pickUpOrderButton.setManaged(false);
-    }
+    mainTableView.setFixedCellSize(70);
+    mainTableView.setItems(FXCollections.observableArrayList(bouquetService.getAll()));
+  }
 
-    private void setupTable(TableColumn<?, ?>... columns) {
-        resetTable();
+  @FXML
+  public void showAccessories() {
+    setActiveTab(accessoriesTabButton);
+    setupTable(
+        TableUtils.imageColumn("Фото", "imagePath"),
+        TableUtils.column("ID", "accessoryId"),
+        TableUtils.column("Назва", "name"),
+        TableUtils.column("Тип", "accessoryType"),
+        TableUtils.column("Колір", "color"),
+        TableUtils.column("Ціна", "price"),
+        TableUtils.column("Кількість", "stockQuantity"));
 
-        mainTableView.getColumns().addAll(columns);
-        mainTableView.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
-    }
+    mainTableView.setFixedCellSize(70);
+    mainTableView.setItems(FXCollections.observableArrayList(accessoryService.getAll()));
+  }
 
-    @FXML
-    public void showFlowers() {
-        setupTable(
-              TableUtils.imageColumn("Фото", "imagePath"),
-              TableUtils.column("ID", "flowerId"),
-              TableUtils.column("Назва", "name"),
-              TableUtils.column("Колір", "color"),
-              TableUtils.column("Ціна", "price"),
-              TableUtils.column("Кількість", "stockQuantity")
-        );
+  @FXML
+  public void showUsers() {
+    setActiveTab(usersTabButton);
+    setupTable(
+        TableUtils.column("Ім'я", "firstName"),
+        TableUtils.column("Прізвище", "lastName"),
+        TableUtils.column("Email", "email"),
+        TableUtils.column("Телефон", "phone"),
+        roleColumn(),
+        TableUtils.column("Дата", "createdAt"));
 
-        mainTableView.setFixedCellSize(70);
-        mainTableView.setItems(FXCollections.observableArrayList(flowerService.getAll()));
-    }
+    mainTableView.setFixedCellSize(45);
+    mainTableView.setItems(FXCollections.observableArrayList(userService.getAll()));
+  }
 
-    @FXML
-    public void showBouquets() {
-        setupTable(
-              TableUtils.imageColumn("Фото", "imagePath"),
-              TableUtils.column("ID", "bouquetId"),
-              TableUtils.column("Назва", "name"),
-              TableUtils.column("Опис", "description"),
-              TableUtils.column("Custom", "custom"),
-              TableUtils.column("Дата", "createdAt")
-        );
+  private TableColumn<User, Role> roleColumn() {
+    TableColumn<User, Role> column = new TableColumn<>("Роль");
 
-        mainTableView.setFixedCellSize(70);
-        mainTableView.setItems(FXCollections.observableArrayList(bouquetService.getAll()));
-    }
+    column.setCellValueFactory(
+        cellData -> new SimpleObjectProperty<>(cellData.getValue().getRole()));
 
-    @FXML
-    public void showAccessories() {
-        setupTable(
-              TableUtils.imageColumn("Фото", "imagePath"),
-              TableUtils.column("ID", "accessoryId"),
-              TableUtils.column("Назва", "name"),
-              TableUtils.column("Тип", "accessoryType"),
-              TableUtils.column("Колір", "color"),
-              TableUtils.column("Ціна", "price"),
-              TableUtils.column("Кількість", "stockQuantity")
-        );
+    column.setCellFactory(
+        value ->
+            new TableCell<>() {
 
-        mainTableView.setFixedCellSize(70);
-        mainTableView.setItems(FXCollections.observableArrayList(accessoryService.getAll()));
-    }
+              private final ComboBox<Role> comboBox =
+                  new ComboBox<>(FXCollections.observableArrayList(Role.CLIENT, Role.FLORIST));
 
-    @FXML
-    public void showUsers() {
-        setupTable(
-              TableUtils.column("Ім'я", "firstName"),
-              TableUtils.column("Прізвище", "lastName"),
-              TableUtils.column("Email", "email"),
-              TableUtils.column("Телефон", "phone"),
-              roleColumn(),
-              TableUtils.column("Дата", "createdAt")
-        );
-
-        mainTableView.setFixedCellSize(45);
-        mainTableView.setItems(FXCollections.observableArrayList(userService.getAll()));
-    }
-
-    private TableColumn<User, Role> roleColumn() {
-        TableColumn<User, Role> column = new TableColumn<>("Роль");
-
-        column.setCellValueFactory(cellData -> new SimpleObjectProperty<>(
-              cellData.getValue().getRole()
-        ));
-
-        column.setCellFactory(value -> new TableCell<>() {
-
-            private final ComboBox<Role> comboBox = new ComboBox<>(
-                  FXCollections.observableArrayList(
-                        Role.CLIENT,
-                        Role.FLORIST
-                  )
-            );
-
-            @Override
-            protected void updateItem(Role role, boolean empty) {
+              @Override
+              protected void updateItem(Role role, boolean empty) {
                 super.updateItem(role, empty);
 
                 if (empty || getTableRow() == null || getTableRow().getItem() == null) {
-                    setGraphic(null);
-                    return;
+                  setGraphic(null);
+                  return;
                 }
 
                 User targetUser = getTableRow().getItem();
@@ -205,114 +241,113 @@ public class MainController {
                 boolean disabled = true;
 
                 if (currentUser != null && currentUser.getRole() == Role.ADMIN) {
-                    if (targetUser.getRole() != Role.ADMIN) {
-                        disabled = false;
-                    }
+                  if (targetUser.getRole() != Role.ADMIN) {
+                    disabled = false;
+                  }
                 }
 
                 comboBox.setDisable(disabled);
 
-                comboBox.setOnAction(event -> {
-                    Role selectedRole = comboBox.getValue();
+                comboBox.setOnAction(
+                    event -> {
+                      Role selectedRole = comboBox.getValue();
 
-                    if (selectedRole == null) {
+                      if (selectedRole == null) {
                         return;
-                    }
+                      }
 
-                    userService.changeRole(targetUser, selectedRole, authService.getCurrentUser());
+                      userService.changeRole(
+                          targetUser, selectedRole, authService.getCurrentUser());
 
-                    mainTableView.refresh();
-                });
+                      mainTableView.refresh();
+                    });
 
                 setGraphic(comboBox);
-            }
-        });
+              }
+            });
 
-        return column;
+    return column;
+  }
+
+  @FXML
+  public void showOrders() {
+    setActiveTab(ordersTabButton);
+    setupTable(
+        TableUtils.column("ID", "orderId"),
+        TableUtils.column("Ім'я", "customerFirstName"),
+        TableUtils.column("Прізвище", "customerLastName"),
+        TableUtils.column("Телефон", "phone"),
+        TableUtils.column("Бюджет", "budget"),
+        TableUtils.column("Стиль", "style"),
+        TableUtils.column("Колір", "preferredColor"),
+        statusColumn(),
+        TableUtils.column("Дата", "createdAt"));
+
+    showAllowedOrderButtons();
+
+    mainTableView.setFixedCellSize(45);
+
+    User currentUser = authService.getCurrentUser();
+
+    if (currentUser != null && currentUser.getRole() == Role.CLIENT) {
+      mainTableView.setItems(
+          FXCollections.observableArrayList(orderService.getByUserId(currentUser.getUserId())));
+    } else {
+      mainTableView.setItems(FXCollections.observableArrayList(orderService.getAll()));
     }
 
-    @FXML
-    public void showOrders() {
-        setupTable(
-              TableUtils.column("ID", "orderId"),
-              TableUtils.column("Ім'я", "customerFirstName"),
-              TableUtils.column("Прізвище", "customerLastName"),
-              TableUtils.column("Телефон", "phone"),
-              TableUtils.column("Бюджет", "budget"),
-              TableUtils.column("Стиль", "style"),
-              TableUtils.column("Колір", "preferredColor"),
-              statusColumn(),
-              TableUtils.column("Дата", "createdAt")
-        );
+    updatePickUpButtonVisibility();
+  }
 
-        showAllowedOrderButtons();
+  private void showAllowedOrderButtons() {
+    User currentUser = authService.getCurrentUser();
 
-        mainTableView.setFixedCellSize(45);
-
-        User currentUser = authService.getCurrentUser();
-
-        if (currentUser != null && currentUser.getRole() == Role.CLIENT) {
-            mainTableView.setItems(FXCollections.observableArrayList(
-                  orderService.getByUserId(currentUser.getUserId())
-            ));
-        } else {
-            mainTableView.setItems(FXCollections.observableArrayList(
-                  orderService.getAll()
-            ));
-        }
-
-        updatePickUpButtonVisibility();
+    if (currentUser == null) {
+      return;
     }
 
-    private void showAllowedOrderButtons() {
-        User currentUser = authService.getCurrentUser();
+    if (currentUser.getRole() == Role.CLIENT) {
+      createOrderButton.setVisible(true);
+      createOrderButton.setManaged(true);
 
-        if (currentUser == null) {
-            return;
-        }
+      editOrderButton.setVisible(true);
+      editOrderButton.setManaged(true);
 
-        if (currentUser.getRole() == Role.CLIENT) {
-            createOrderButton.setVisible(true);
-            createOrderButton.setManaged(true);
+      deleteOrderButton.setVisible(true);
+      deleteOrderButton.setManaged(true);
 
-            editOrderButton.setVisible(true);
-            editOrderButton.setManaged(true);
-
-            deleteOrderButton.setVisible(true);
-            deleteOrderButton.setManaged(true);
-
-            return;
-        }
-
-        if (currentUser.getRole() == Role.ADMIN || currentUser.getRole() == Role.FLORIST) {
-            editOrderButton.setVisible(true);
-            editOrderButton.setManaged(true);
-
-            deleteOrderButton.setVisible(true);
-            deleteOrderButton.setManaged(true);
-        }
+      return;
     }
 
-    private TableColumn<Order, OrderStatus> statusColumn() {
-        TableColumn<Order, OrderStatus> column = new TableColumn<>("Статус");
+    if (currentUser.getRole() == Role.ADMIN || currentUser.getRole() == Role.FLORIST) {
+      editOrderButton.setVisible(true);
+      editOrderButton.setManaged(true);
 
-        column.setCellValueFactory(cellData -> new SimpleObjectProperty<>(
-              cellData.getValue().getStatus()
-        ));
+      deleteOrderButton.setVisible(true);
+      deleteOrderButton.setManaged(true);
+    }
+  }
 
-        column.setCellFactory(value -> new TableCell<>() {
+  private TableColumn<Order, OrderStatus> statusColumn() {
+    TableColumn<Order, OrderStatus> column = new TableColumn<>("Статус");
 
-            private final ComboBox<OrderStatus> comboBox = new ComboBox<>(
-                  FXCollections.observableArrayList(OrderStatus.values())
-            );
+    column.setCellValueFactory(
+        cellData -> new SimpleObjectProperty<>(cellData.getValue().getStatus()));
 
-            @Override
-            protected void updateItem(OrderStatus status, boolean empty) {
+    column.setCellFactory(
+        value ->
+            new TableCell<>() {
+
+              private final ComboBox<OrderStatus> comboBox =
+                  new ComboBox<>(FXCollections.observableArrayList(OrderStatus.values()));
+
+              @Override
+              protected void updateItem(OrderStatus status, boolean empty) {
                 super.updateItem(status, empty);
 
                 if (empty || getTableRow() == null || getTableRow().getItem() == null) {
-                    setGraphic(null);
-                    return;
+                  setGraphic(null);
+                  return;
                 }
 
                 Order order = getTableRow().getItem();
@@ -320,185 +355,186 @@ public class MainController {
                 comboBox.setValue(order.getStatus());
                 comboBox.setDisable(!canCurrentUserChangeStatus());
 
-                comboBox.setOnAction(event -> {
-                    OrderStatus selectedStatus = comboBox.getValue();
+                comboBox.setOnAction(
+                    event -> {
+                      OrderStatus selectedStatus = comboBox.getValue();
 
-                    if (selectedStatus == null) {
+                      if (selectedStatus == null) {
                         return;
-                    }
+                      }
 
-                    order.setStatus(selectedStatus);
-                    orderService.update(order);
+                      order.setStatus(selectedStatus);
+                      orderService.update(order);
 
-                    updatePickUpButtonVisibility();
-                    mainTableView.refresh();
-                });
+                      updatePickUpButtonVisibility();
+                      mainTableView.refresh();
+                    });
 
                 setGraphic(comboBox);
-            }
-        });
+              }
+            });
 
-        return column;
+    return column;
+  }
+
+  private boolean canCurrentUserChangeStatus() {
+    User currentUser = authService.getCurrentUser();
+
+    if (currentUser == null) {
+      return false;
     }
 
-    private boolean canCurrentUserChangeStatus() {
-        User currentUser = authService.getCurrentUser();
-
-        if (currentUser == null) {
-            return false;
-        }
-
-        if (currentUser.getRole() == Role.ADMIN) {
-            return true;
-        }
-
-        return currentUser.getRole() == Role.FLORIST;
+    if (currentUser.getRole() == Role.ADMIN) {
+      return true;
     }
 
-    private void updatePickUpButtonVisibility() {
-        pickUpOrderButton.setVisible(false);
-        pickUpOrderButton.setManaged(false);
+    return currentUser.getRole() == Role.FLORIST;
+  }
 
-        User currentUser = authService.getCurrentUser();
+  private void updatePickUpButtonVisibility() {
+    pickUpOrderButton.setVisible(false);
+    pickUpOrderButton.setManaged(false);
 
-        if (currentUser == null) {
-            return;
-        }
+    User currentUser = authService.getCurrentUser();
 
-        if (currentUser.getRole() != Role.CLIENT) {
-            return;
-        }
-
-        Object selected = mainTableView.getSelectionModel().getSelectedItem();
-
-        if (!(selected instanceof Order order)) {
-            return;
-        }
-
-        if (order.getStatus() != OrderStatus.COMPLETED) {
-            return;
-        }
-
-        pickUpOrderButton.setVisible(true);
-        pickUpOrderButton.setManaged(true);
+    if (currentUser == null) {
+      return;
     }
 
-    @FXML
-    private void handlePickUpOrder() {
-        Object selected = mainTableView.getSelectionModel().getSelectedItem();
-
-        if (!(selected instanceof Order order)) {
-            return;
-        }
-
-        if (order.getStatus() != OrderStatus.COMPLETED) {
-            return;
-        }
-
-        order.setStatus(OrderStatus.PICKED_UP);
-        orderService.update(order);
-
-        showOrders();
+    if (currentUser.getRole() != Role.CLIENT) {
+      return;
     }
 
-    @FXML
-    private void openCreateOrderWindow() {
-        MainApplication.sceneManager.switchSceneMaximized("/view/create-order-view.fxml", "Create Order");
+    Object selected = mainTableView.getSelectionModel().getSelectedItem();
+
+    if (!(selected instanceof Order order)) {
+      return;
     }
 
-    @FXML
-    private void handleEditOrder() {
-        Object selected = mainTableView.getSelectionModel().getSelectedItem();
-
-        if (!(selected instanceof Order selectedOrder)) {
-            return;
-        }
-
-        if (!canEditOrder(selectedOrder)) {
-            return;
-        }
-
-        CreateOrderController controller = MainApplication.sceneManager.switchSceneGetControllerMaximized(
-              "/view/create-order-view.fxml",
-              "Edit Order"
-        );
-
-        controller.loadOrder(selectedOrder);
+    if (order.getStatus() != OrderStatus.COMPLETED) {
+      return;
     }
 
-    private boolean canEditOrder(Order order) {
-        User currentUser = authService.getCurrentUser();
+    pickUpOrderButton.setVisible(true);
+    pickUpOrderButton.setManaged(true);
+  }
 
-        if (currentUser == null || order == null) {
-            return false;
-        }
+  @FXML
+  private void handlePickUpOrder() {
+    Object selected = mainTableView.getSelectionModel().getSelectedItem();
 
-        if (currentUser.getRole() == Role.CLIENT) {
-            if (order.getStatus() == OrderStatus.NEW) {
-                return true;
-            }
+    if (!(selected instanceof Order order)) {
+      return;
+    }
 
-            return order.getStatus() == OrderStatus.ACCEPTED;
-        }
+    if (order.getStatus() != OrderStatus.COMPLETED) {
+      return;
+    }
 
-        if (currentUser.getRole() == Role.FLORIST || currentUser.getRole() == Role.ADMIN) {
-            if (order.getStatus() == OrderStatus.COMPLETED) {
-                return false;
-            }
+    order.setStatus(OrderStatus.PICKED_UP);
+    orderService.update(order);
 
-            return order.getStatus() != OrderStatus.PICKED_UP;
-        }
+    showOrders();
+  }
 
+  @FXML
+  private void openCreateOrderWindow() {
+    MainApplication.sceneManager.switchSceneMaximized(
+        "/view/create-order-view.fxml", "Create Order");
+  }
+
+  @FXML
+  private void handleEditOrder() {
+    Object selected = mainTableView.getSelectionModel().getSelectedItem();
+
+    if (!(selected instanceof Order selectedOrder)) {
+      return;
+    }
+
+    if (!canEditOrder(selectedOrder)) {
+      return;
+    }
+
+    CreateOrderController controller =
+        MainApplication.sceneManager.switchSceneGetControllerMaximized(
+            "/view/create-order-view.fxml", "Edit Order");
+
+    controller.loadOrder(selectedOrder);
+  }
+
+  private boolean canEditOrder(Order order) {
+    User currentUser = authService.getCurrentUser();
+
+    if (currentUser == null || order == null) {
+      return false;
+    }
+
+    if (currentUser.getRole() == Role.CLIENT) {
+      if (order.getStatus() == OrderStatus.NEW) {
+        return true;
+      }
+
+      return order.getStatus() == OrderStatus.ACCEPTED;
+    }
+
+    if (currentUser.getRole() == Role.FLORIST || currentUser.getRole() == Role.ADMIN) {
+      if (order.getStatus() == OrderStatus.COMPLETED) {
         return false;
+      }
+
+      return order.getStatus() != OrderStatus.PICKED_UP;
     }
 
-    private boolean canDeleteOrder(Order order) {
-        User currentUser = authService.getCurrentUser();
+    return false;
+  }
 
-        if (currentUser == null || order == null) {
-            return false;
-        }
+  private boolean canDeleteOrder(Order order) {
+    User currentUser = authService.getCurrentUser();
 
-        if (currentUser.getRole() == Role.CLIENT) {
-            if (order.getStatus() == OrderStatus.NEW) {
-                return true;
-            }
+    if (currentUser == null || order == null) {
+      return false;
+    }
 
-            return order.getStatus() == OrderStatus.ACCEPTED;
-        }
+    if (currentUser.getRole() == Role.CLIENT) {
+      if (order.getStatus() == OrderStatus.NEW) {
+        return true;
+      }
 
-        if (currentUser.getRole() == Role.FLORIST || currentUser.getRole() == Role.ADMIN) {
-            if (order.getStatus() == OrderStatus.COMPLETED) {
-                return false;
-            }
+      return order.getStatus() == OrderStatus.ACCEPTED;
+    }
 
-            return order.getStatus() != OrderStatus.PICKED_UP;
-        }
-
+    if (currentUser.getRole() == Role.FLORIST || currentUser.getRole() == Role.ADMIN) {
+      if (order.getStatus() == OrderStatus.COMPLETED) {
         return false;
+      }
+
+      return order.getStatus() != OrderStatus.PICKED_UP;
     }
 
-    @FXML
-    private void handleDeleteOrder() {
-        Object selected = mainTableView.getSelectionModel().getSelectedItem();
+    return false;
+  }
 
-        if (!(selected instanceof Order selectedOrder)) {
-            return;
-        }
+  @FXML
+  private void handleDeleteOrder() {
+    Object selected = mainTableView.getSelectionModel().getSelectedItem();
 
-        if (!canDeleteOrder(selectedOrder)) {
-            return;
-        }
-
-        orderService.delete(selectedOrder.getOrderId());
-
-        showOrders();
+    if (!(selected instanceof Order selectedOrder)) {
+      return;
     }
 
-    @FXML
-    private void handleLogout() {
-        authService.logout();
-
-        MainApplication.sceneManager.switchSceneMaximized("/view/login-view.fxml", "Login");
+    if (!canDeleteOrder(selectedOrder)) {
+      return;
     }
+
+    orderService.delete(selectedOrder.getOrderId());
+
+    showOrders();
+  }
+
+  @FXML
+  private void handleLogout() {
+    authService.logout();
+
+    MainApplication.sceneManager.switchSceneMaximized("/view/login-view.fxml", "Login");
+  }
 }

@@ -10,18 +10,25 @@ import org.junit.jupiter.api.Test;
 
 class AccessoryRepositoryTest {
 
-    private final AccessoryRepositoryImpl repository = new AccessoryRepositoryImpl();
+  private final AccessoryRepositoryImpl repository = new AccessoryRepositoryImpl();
 
-    @Test
-    void shouldSaveAndFindById() {
+  @Test
+  void shouldSaveAndFindById() {
 
-        Accessory accessory =
-                new Accessory(UUID.randomUUID(), "Бантик", AccessoryType.DECOR, "Red", BigDecimal.valueOf(50), 10);
+    Accessory accessory =
+        new Accessory(
+            UUID.randomUUID(),
+            "Бантик",
+            AccessoryType.DECOR,
+            "Red",
+            BigDecimal.valueOf(50),
+            10,
+            "/images/accessories/test.png");
 
-        repository.save(accessory);
+    repository.save(accessory);
 
-        var result = repository.findById(accessory.getAccessoryId());
+    var result = repository.findById(accessory.getAccessoryId());
 
-        assertTrue(result.isPresent());
-    }
+    assertTrue(result.isPresent());
+  }
 }

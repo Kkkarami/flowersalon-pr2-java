@@ -7,13 +7,13 @@ import java.util.UUID;
 
 public interface FlowerService {
 
-    List<Flower> getAll();
+  List<Flower> getAll();
 
-    Flower getById(UUID id);
+  Flower getById(UUID id);
 
-    void create(Flower flower, User currentUser);
+  void create(Flower flower, User currentUser);
 
-    void update(Flower flower, User currentUser);
+  void update(Flower flower, User currentUser);
 
-    void delete(UUID id, User currentUser);
+  void delete(UUID id, User currentUser);
 }

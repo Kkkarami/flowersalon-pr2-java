@@ -7,5 +7,5 @@ import java.util.UUID;
 
 public interface OrderRepository extends Repository<Order> {
 
-    List<Order> findByUserId(UUID userId);
+  List<Order> findByUserId(UUID userId);
 }

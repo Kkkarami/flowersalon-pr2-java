@@ -9,45 +9,45 @@ import java.util.List;
 
 public class UserServiceImpl implements UserService {
 
-    private final UserRepository userRepository;
+  private final UserRepository userRepository;
 
-    @Inject
-    public UserServiceImpl(UserRepository userRepository) {
-        this.userRepository = userRepository;
+  @Inject
+  public UserServiceImpl(UserRepository userRepository) {
+    this.userRepository = userRepository;
+  }
+
+  @Override
+  public List<User> getAll() {
+    return userRepository.findAll();
+  }
+
+  @Override
+  public void changeRole(User targetUser, Role newRole, User currentUser) {
+    if (currentUser == null) {
+      return;
     }
 
-    @Override
-    public List<User> getAll() {
-        return userRepository.findAll();
+    if (targetUser == null) {
+      return;
     }
 
-    @Override
-    public void changeRole(User targetUser, Role newRole, User currentUser) {
-        if (currentUser == null) {
-            return;
-        }
-
-        if (targetUser == null) {
-            return;
-        }
-
-        if (newRole == null) {
-            return;
-        }
-
-        if (currentUser.getRole() != Role.ADMIN) {
-            return;
-        }
-
-        if (targetUser.getRole() == Role.ADMIN) {
-            return;
-        }
-
-        if (newRole == Role.ADMIN) {
-            return;
-        }
-
-        targetUser.setRole(newRole);
-        userRepository.update(targetUser);
+    if (newRole == null) {
+      return;
     }
+
+    if (currentUser.getRole() != Role.ADMIN) {
+      return;
+    }
+
+    if (targetUser.getRole() == Role.ADMIN) {
+      return;
+    }
+
+    if (newRole == Role.ADMIN) {
+      return;
+    }
+
+    targetUser.setRole(newRole);
+    userRepository.update(targetUser);
+  }
 }

@@ -4,8 +4,8 @@ import com.fedelesh.flowersalon.infrastructure.persistence.util.DatabaseInitiali
 
 public class Main {
 
-    public static void main(String[] args) {
+  public static void main(String[] args) {
 
-        DatabaseInitializer.init();
-    }
+    DatabaseInitializer.init();
+  }
 }

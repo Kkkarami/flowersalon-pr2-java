@@ -42,6 +42,7 @@ CREATE TABLE Bouquets (
                           bouquet_id CHAR(36) PRIMARY KEY,
                           name VARCHAR(100),
                           description TEXT,
+                          price DECIMAL(10,2) NOT NULL,
                           is_custom BOOLEAN DEFAULT FALSE,
                           image_path VARCHAR(255),
                           created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,

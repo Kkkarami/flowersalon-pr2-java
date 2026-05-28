@@ -13,6 +13,8 @@
   hgap="10"
   prefHeight="360"
   prefWidth="420"
+  styleClass="page"
+  stylesheets="@/styles/app.css"
   vgap="10"
   xmlns="http://javafx.com/javafx/21"
   fx:controller="com.fedelesh.flowersalon.presentation.controller.LoginController">
@@ -22,6 +24,7 @@
     GridPane.rowIndex="6"
     onAction="#onLoginClick"
     prefWidth="120"
+    styleClass="button,primary-button"
     text="Увійти"
     fx:id="loginButton">
     <font>
@@ -33,11 +36,13 @@
     GridPane.halignment="CENTER"
     GridPane.rowIndex="7"
     onAction="#onOpenSignUpClick"
+    styleClass="subtle-label"
     text="Нема акаунту? Зареєструйтесь"/>
 
   <Label GridPane.columnSpan="2"
     GridPane.halignment="CENTER"
     GridPane.rowIndex="3"
+    styleClass="subtle-label"
     text="Пароль"/>
 
   <Label GridPane.columnSpan="2"
@@ -48,7 +53,9 @@
     textFill="RED"
     fx:id="errorLabel"/>
 
-  <Label GridPane.columnSpan="2" GridPane.halignment="CENTER" GridPane.rowIndex="0" text="Увійти">
+  <Label GridPane.columnSpan="2" GridPane.halignment="CENTER" GridPane.rowIndex="0"
+    styleClass="title"
+    text="Увійти">
     <font>
       <Font size="28.0"/>
     </font>
@@ -56,6 +63,7 @@
 
   <Label GridPane.columnIndex="0" GridPane.columnSpan="2" GridPane.halignment="CENTER"
     GridPane.rowIndex="1"
+    styleClass="subtle-label"
     text="Пошта"/>
 
   <PasswordField GridPane.columnSpan="2"
