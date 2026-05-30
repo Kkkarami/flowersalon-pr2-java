@@ -11,6 +11,7 @@ import com.google.inject.Inject;
 import java.io.InputStream;
 import java.math.BigDecimal;
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableCell;
@@ -333,7 +334,7 @@ public class CreateOrderController {
     styleField.setText(order.getStyle());
     colorField.setText(order.getPreferredColor());
 
-    createOrderButton.setText("Update Order");
+    createOrderButton.setText("Оновити замовлення");
 
     viewModel.loadOrderItems(order);
 
@@ -343,6 +344,40 @@ public class CreateOrderController {
       addImageToWorkspace(item);
     }
   }
+
+    private boolean validateOrderForm() {
+
+        if (firstNameField.getText() == null ||
+              firstNameField.getText().trim().isEmpty()) {
+
+            showValidationError("Введіть ім'я клієнта");
+            return false;
+        }
+
+        if (lastNameField.getText() == null ||
+              lastNameField.getText().trim().isEmpty()) {
+
+            showValidationError("Введіть прізвище клієнта");
+            return false;
+        }
+
+        if (phoneField.getText() == null ||
+              phoneField.getText().trim().isEmpty()) {
+
+            showValidationError("Введіть номер телефону");
+            return false;
+        }
+
+        return true;
+    }
+
+    private void showValidationError(String message) {
+        Alert alert = new Alert(Alert.AlertType.WARNING);
+        alert.setTitle("Заповніть необхідні поля!");
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
+    }
 
   @FXML
   private void handleAddFlower() {
@@ -407,6 +442,10 @@ public class CreateOrderController {
 
   @FXML
   private void handleCreateOrder() {
+      if (!validateOrderForm()) {
+          return;
+      }
+
     if (editingOrder == null) {
       viewModel.createOrder(
           firstNameField.getText(),

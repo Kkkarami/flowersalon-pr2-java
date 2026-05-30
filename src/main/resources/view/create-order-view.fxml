@@ -27,51 +27,51 @@
       <items>
 
         <VBox spacing="10">
-          <Button onAction="#handleBack" styleClass="button,secondary-button" text="Back"/>
+          <Button onAction="#handleBack" styleClass="button,secondary-button" text="Назад"/>
 
           <TabPane VBox.vgrow="ALWAYS">
             <tabs>
 
-              <Tab closable="false" text="Flowers">
+              <Tab closable="false" text="Квіти">
                 <VBox spacing="10">
-                  <Button onAction="#handleAddFlower" styleClass="button,primary-button" text="Add Flower"/>
+                  <Button onAction="#handleAddFlower" styleClass="button,primary-button" text="Додати квітку"/>
 
                   <TableView VBox.vgrow="ALWAYS" fx:id="flowersTableView">
                     <columns>
-                      <TableColumn prefWidth="80" text="Image" fx:id="flowerImageColumn"/>
-                      <TableColumn prefWidth="120" text="Name" fx:id="flowerNameColumn"/>
-                      <TableColumn prefWidth="100" text="Color" fx:id="flowerColorColumn"/>
-                      <TableColumn prefWidth="80" text="Price" fx:id="flowerPriceColumn"/>
+                      <TableColumn prefWidth="80" text="Зображення" fx:id="flowerImageColumn"/>
+                      <TableColumn prefWidth="120" text="Назва" fx:id="flowerNameColumn"/>
+                      <TableColumn prefWidth="100" text="Колір" fx:id="flowerColorColumn"/>
+                      <TableColumn prefWidth="80" text="Ціна" fx:id="flowerPriceColumn"/>
                     </columns>
                   </TableView>
                 </VBox>
               </Tab>
 
-              <Tab closable="false" text="Bouquets">
+              <Tab closable="false" text="Букети">
                 <VBox spacing="10">
-                  <Button onAction="#handleAddBouquet" styleClass="button,primary-button" text="Add Bouquet"/>
+                  <Button onAction="#handleAddBouquet" styleClass="button,primary-button" text="Додати букет"/>
 
                   <TableView VBox.vgrow="ALWAYS" fx:id="bouquetsTableView">
                     <columns>
-                      <TableColumn prefWidth="80" text="Image" fx:id="bouquetImageColumn"/>
-                      <TableColumn prefWidth="120" text="Name" fx:id="bouquetNameColumn"/>
-                      <TableColumn prefWidth="220" text="Description" fx:id="bouquetDescriptionColumn"/>
-                      <TableColumn prefWidth="80" text="Price" fx:id="bouquetPriceColumn"/>
+                      <TableColumn prefWidth="80" text="Зображення" fx:id="bouquetImageColumn"/>
+                      <TableColumn prefWidth="120" text="Назва" fx:id="bouquetNameColumn"/>
+                      <TableColumn prefWidth="220" text="Опис" fx:id="bouquetDescriptionColumn"/>
+                      <TableColumn prefWidth="80" text="Ціна" fx:id="bouquetPriceColumn"/>
                     </columns>
                   </TableView>
                 </VBox>
               </Tab>
 
-              <Tab closable="false" text="Accessories">
+              <Tab closable="false" text="Аксесуари">
                 <VBox spacing="10">
-                  <Button onAction="#handleAddAccessory" styleClass="button,primary-button" text="Add Accessory"/>
+                  <Button onAction="#handleAddAccessory" styleClass="button,primary-button" text="Додати аксесуар"/>
 
                   <TableView VBox.vgrow="ALWAYS" fx:id="accessoriesTableView">
                     <columns>
-                      <TableColumn prefWidth="80" text="Image" fx:id="accessoryImageColumn"/>
-                      <TableColumn prefWidth="120" text="Name" fx:id="accessoryNameColumn"/>
-                      <TableColumn prefWidth="120" text="Type" fx:id="accessoryTypeColumn"/>
-                      <TableColumn prefWidth="80" text="Price" fx:id="accessoryPriceColumn"/>
+                      <TableColumn prefWidth="80" text="Зображення" fx:id="accessoryImageColumn"/>
+                      <TableColumn prefWidth="120" text="Назва" fx:id="accessoryNameColumn"/>
+                      <TableColumn prefWidth="120" text="Тип" fx:id="accessoryTypeColumn"/>
+                      <TableColumn prefWidth="80" text="Ціна" fx:id="accessoryPriceColumn"/>
                     </columns>
                   </TableView>
                 </VBox>
@@ -84,21 +84,21 @@
             <Button maxWidth="Infinity"
               onAction="#handleCreateOrder"
               styleClass="button,primary-button"
-              text="Create Order"
+              text="Створити замовлення"
               fx:id="createOrderButton"/>
 
             <HBox spacing="10" styleClass="total-box">
-              <Label styleClass="subtle-label" text="Total:"/>
+              <Label styleClass="subtle-label" text="Всього:"/>
               <Label fx:id="totalLabel"/>
             </HBox>
-            <Label styleClass="section-title" text="Customer Info"/>
-            <TextField promptText="Phone" fx:id="phoneField"/>
-            <TextField promptText="Style" fx:id="styleField"/>
-            <TextField promptText="Preferred Color" fx:id="colorField"/>
+            <Label styleClass="section-title" text="Інформація користувача"/>
+            <TextField promptText="Номер телефону" fx:id="phoneField"/>
+            <TextField promptText="Стиль" fx:id="styleField"/>
+            <TextField promptText="Бажаний колір" fx:id="colorField"/>
 
-            <TextField promptText="First Name" fx:id="firstNameField"/>
+            <TextField promptText="Ім'я" fx:id="firstNameField"/>
 
-            <TextField promptText="Last Name" fx:id="lastNameField"/>
+            <TextField promptText="Призвіще" fx:id="lastNameField"/>
           </VBox>
 
           <padding>
@@ -110,17 +110,17 @@
           <Button maxWidth="Infinity"
             onAction="#handleRemoveItem"
             styleClass="button,danger-button"
-            text="Remove Selected"/>
+            text="Прибрати вибране"/>
 
-          <Label styleClass="section-title" text="Current Order"/>
+          <Label styleClass="section-title" text="Поточне замовлення"/>
 
           <TableView VBox.vgrow="ALWAYS" fx:id="orderItemsTableView">
             <columns>
-              <TableColumn prefWidth="90" text="Type" fx:id="orderTypeColumn"/>
-              <TableColumn prefWidth="140" text="Name" fx:id="orderNameColumn"/>
-              <TableColumn prefWidth="60" text="Qty" fx:id="orderQuantityColumn"/>
-              <TableColumn prefWidth="80" text="Price" fx:id="orderPriceColumn"/>
-              <TableColumn prefWidth="80" text="Total" fx:id="orderTotalColumn"/>
+              <TableColumn prefWidth="90" text="Тип" fx:id="orderTypeColumn"/>
+              <TableColumn prefWidth="140" text="Назва" fx:id="orderNameColumn"/>
+              <TableColumn prefWidth="60" text="К-сть" fx:id="orderQuantityColumn"/>
+              <TableColumn prefWidth="80" text="Ціна" fx:id="orderPriceColumn"/>
+              <TableColumn prefWidth="80" text="Всього" fx:id="orderTotalColumn"/>
             </columns>
           </TableView>
 
@@ -130,7 +130,7 @@
         </VBox>
 
         <VBox spacing="10">
-          <Label styleClass="section-title" text="Workspace"/>
+          <Label styleClass="section-title" text="Робоча поверхня"/>
 
           <Pane VBox.vgrow="ALWAYS"
             prefHeight="600"

@@ -122,6 +122,12 @@
       <version>2.0.1</version>
     </dependency>
 
+    <dependency>
+      <artifactId>json</artifactId>
+      <groupId>org.json</groupId>
+      <version>20240303</version>
+    </dependency>
+
   </dependencies>
   <groupId>com.fedelesh</groupId>
 

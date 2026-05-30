@@ -17,11 +17,18 @@ import javafx.application.Platform;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import com.fedelesh.flowersalon.infrastructure.payment.LiqPayService;
+import java.awt.Desktop;
+import java.net.URI;
+import java.util.Optional;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
 
 public class MainController {
 
@@ -31,6 +38,7 @@ public class MainController {
   private final BouquetService bouquetService;
   private final AccessoryService accessoryService;
   private final OrderService orderService;
+  private final LiqPayService liqPayService = new LiqPayService();
 
   @FXML private Button flowersTabButton;
 
@@ -72,6 +80,7 @@ public class MainController {
   @FXML
   public void initialize() {
     hideOrderButtons();
+    configureTabVisibility();
 
     createOrderButton.setOnAction(event -> openCreateOrderWindow());
 
@@ -154,7 +163,6 @@ public class MainController {
     setActiveTab(flowersTabButton);
     setupTable(
         TableUtils.imageColumn("Фото", "imagePath"),
-        TableUtils.column("ID", "flowerId"),
         TableUtils.column("Назва", "name"),
         TableUtils.column("Колір", "color"),
         TableUtils.column("Ціна", "price"),
@@ -169,7 +177,6 @@ public class MainController {
     setActiveTab(bouquetsTabButton);
     setupTable(
         TableUtils.imageColumn("Фото", "imagePath"),
-        TableUtils.column("ID", "bouquetId"),
         TableUtils.column("Назва", "name"),
         TableUtils.column("Опис", "description"),
         TableUtils.column("Ціна", "price"),
@@ -185,7 +192,6 @@ public class MainController {
     setActiveTab(accessoriesTabButton);
     setupTable(
         TableUtils.imageColumn("Фото", "imagePath"),
-        TableUtils.column("ID", "accessoryId"),
         TableUtils.column("Назва", "name"),
         TableUtils.column("Тип", "accessoryType"),
         TableUtils.column("Колір", "color"),
@@ -353,7 +359,7 @@ public class MainController {
                 Order order = getTableRow().getItem();
 
                 comboBox.setValue(order.getStatus());
-                comboBox.setDisable(!canCurrentUserChangeStatus());
+                comboBox.setDisable(!canCurrentUserChangeStatus(order));
 
                 comboBox.setOnAction(
                     event -> {
@@ -377,19 +383,27 @@ public class MainController {
     return column;
   }
 
-  private boolean canCurrentUserChangeStatus() {
-    User currentUser = authService.getCurrentUser();
+    private boolean canCurrentUserChangeStatus(Order order) {
+        User currentUser = authService.getCurrentUser();
 
-    if (currentUser == null) {
-      return false;
+        if (currentUser == null) {
+            return false;
+        }
+
+        if (order == null) {
+            return false;
+        }
+
+        if (order.getStatus() == OrderStatus.PICKED_UP) {
+            return false;
+        }
+
+        if (currentUser.getRole() == Role.ADMIN) {
+            return true;
+        }
+
+        return currentUser.getRole() == Role.FLORIST;
     }
-
-    if (currentUser.getRole() == Role.ADMIN) {
-      return true;
-    }
-
-    return currentUser.getRole() == Role.FLORIST;
-  }
 
   private void updatePickUpButtonVisibility() {
     pickUpOrderButton.setVisible(false);
@@ -419,23 +433,46 @@ public class MainController {
     pickUpOrderButton.setManaged(true);
   }
 
-  @FXML
-  private void handlePickUpOrder() {
-    Object selected = mainTableView.getSelectionModel().getSelectedItem();
+    @FXML
+    private void handlePickUpOrder() {
+        Object selected = mainTableView.getSelectionModel().getSelectedItem();
 
-    if (!(selected instanceof Order order)) {
-      return;
+        if (!(selected instanceof Order order)) {
+            showWarning("Замовлення не вибрано");
+            return;
+        }
+
+        if (order.getStatus() != OrderStatus.COMPLETED) {
+            showWarning("Оплатити можна тільки виконане замовлення");
+            return;
+        }
+
+        try {
+            String url = liqPayService.generatePaymentUrl(
+                  order.getBudget(),
+                  "Оплата замовлення квітів",
+                  order.getOrderId().toString()
+            );
+
+            Desktop.getDesktop().browse(new URI(url));
+
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setTitle("Оплата LiqPay");
+            alert.setHeaderText(null);
+            alert.setContentText("Після оплати натисніть OK, щоб підтвердити отримання замовлення.");
+
+            Optional<ButtonType> result = alert.showAndWait();
+
+            if (result.isPresent() && result.get() == ButtonType.OK) {
+                order.setStatus(OrderStatus.PICKED_UP);
+                orderService.update(order);
+                showOrders();
+            }
+
+        } catch (Exception e) {
+            showWarning("Не вдалося відкрити оплату: " + e.getMessage());
+        }
     }
-
-    if (order.getStatus() != OrderStatus.COMPLETED) {
-      return;
-    }
-
-    order.setStatus(OrderStatus.PICKED_UP);
-    orderService.update(order);
-
-    showOrders();
-  }
 
   @FXML
   private void openCreateOrderWindow() {
@@ -443,24 +480,27 @@ public class MainController {
         "/view/create-order-view.fxml", "Create Order");
   }
 
-  @FXML
-  private void handleEditOrder() {
-    Object selected = mainTableView.getSelectionModel().getSelectedItem();
+    @FXML
+    private void handleEditOrder() {
+        Object selected = mainTableView.getSelectionModel().getSelectedItem();
 
-    if (!(selected instanceof Order selectedOrder)) {
-      return;
+        if (!(selected instanceof Order selectedOrder)) {
+            showWarning("Замовлення не вибрано");
+            return;
+        }
+
+        if (!canEditOrder(selectedOrder)) {
+            showWarning("Це замовлення не можна оновити");
+            return;
+        }
+
+        CreateOrderController controller = MainApplication.sceneManager.switchSceneGetControllerMaximized(
+              "/view/create-order-view.fxml",
+              "Редагування замовлення"
+        );
+
+        controller.loadOrder(selectedOrder);
     }
-
-    if (!canEditOrder(selectedOrder)) {
-      return;
-    }
-
-    CreateOrderController controller =
-        MainApplication.sceneManager.switchSceneGetControllerMaximized(
-            "/view/create-order-view.fxml", "Edit Order");
-
-    controller.loadOrder(selectedOrder);
-  }
 
   private boolean canEditOrder(Order order) {
     User currentUser = authService.getCurrentUser();
@@ -514,22 +554,47 @@ public class MainController {
     return false;
   }
 
-  @FXML
-  private void handleDeleteOrder() {
-    Object selected = mainTableView.getSelectionModel().getSelectedItem();
+    private void configureTabVisibility() {
+        User currentUser = authService.getCurrentUser();
 
-    if (!(selected instanceof Order selectedOrder)) {
-      return;
+        boolean usersVisible = false;
+
+        if (currentUser != null) {
+            if (currentUser.getRole() == Role.ADMIN || currentUser.getRole() == Role.FLORIST) {
+                usersVisible = true;
+            }
+        }
+
+        usersTabButton.setVisible(usersVisible);
+        usersTabButton.setManaged(usersVisible);
     }
 
-    if (!canDeleteOrder(selectedOrder)) {
-      return;
+    private void showWarning(String message) {
+        Alert alert = new Alert(Alert.AlertType.WARNING);
+        alert.setTitle("Попередження");
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
     }
 
-    orderService.delete(selectedOrder.getOrderId());
+    @FXML
+    private void handleDeleteOrder() {
+        Object selected = mainTableView.getSelectionModel().getSelectedItem();
 
-    showOrders();
-  }
+        if (!(selected instanceof Order selectedOrder)) {
+            showWarning("Замовлення не вибрано");
+            return;
+        }
+
+        if (!canDeleteOrder(selectedOrder)) {
+            showWarning("Це замовлення не можна видалити");
+            return;
+        }
+
+        orderService.delete(selectedOrder.getOrderId());
+
+        showOrders();
+    }
 
   @FXML
   private void handleLogout() {

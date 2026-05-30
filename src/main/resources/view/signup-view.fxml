@@ -159,25 +159,25 @@
     <PasswordField GridPane.columnSpan="2"
       GridPane.rowIndex="11"
       prefWidth="420"
-      promptText="Password"
+      promptText="Пароль (від 6-ти символів)"
       fx:id="passwordField"/>
 
     <TextField GridPane.columnIndex="0"
       GridPane.rowIndex="2"
       prefWidth="200"
-      promptText="First Name"
+      promptText="Ім'я"
       fx:id="firstNameField"/>
 
     <TextField GridPane.columnIndex="1"
       GridPane.rowIndex="2"
       prefWidth="200"
-      promptText="Last Name"
+      promptText="Призвіще"
       fx:id="lastNameField"/>
 
     <TextField GridPane.columnSpan="2"
       GridPane.rowIndex="5"
       prefWidth="420"
-      promptText="example: mail@gmail.com"
+      promptText="Приклад: mail@gmail.com"
       fx:id="emailField"/>
 
     <TextField GridPane.columnSpan="2"

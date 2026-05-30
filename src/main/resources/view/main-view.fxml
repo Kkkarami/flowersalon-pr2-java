@@ -24,28 +24,28 @@
         <Button managed="false"
           onAction="#openCreateOrderWindow"
           styleClass="button,primary-button"
-          text="Create Order"
+          text="Створити замовлення"
           visible="false"
           fx:id="createOrderButton"/>
 
         <Button managed="false"
           onAction="#handleEditOrder"
           styleClass="button,secondary-button"
-          text="Edit Order"
+          text="Редагувати замовлення"
           visible="false"
           fx:id="editOrderButton"/>
 
         <Button managed="false"
           onAction="#handleDeleteOrder"
           styleClass="button,danger-button"
-          text="Delete Order"
+          text="Видалити замовлення"
           visible="false"
           fx:id="deleteOrderButton"/>
 
         <Button managed="false"
           onAction="#handlePickUpOrder"
           styleClass="button,success-button"
-          text="Оплатити / Забрати"
+          text="Оплатити"
           visible="false"
           fx:id="pickUpOrderButton"/>
 
@@ -62,12 +62,12 @@
 
   <top>
     <ToolBar styleClass="tool-bar">
-      <Button onAction="#showFlowers" styleClass="button,secondary-button" text="Flowers" fx:id="flowersTabButton"/>
-      <Button onAction="#showBouquets" styleClass="button,secondary-button" text="Bouquets" fx:id="bouquetsTabButton"/>
-      <Button onAction="#showAccessories" styleClass="button,secondary-button" text="Accessories" fx:id="accessoriesTabButton"/>
-      <Button onAction="#showUsers" styleClass="button,secondary-button" text="Users" fx:id="usersTabButton"/>
-      <Button onAction="#showOrders" styleClass="button,secondary-button" text="Orders" fx:id="ordersTabButton"/>
-      <Button onAction="#handleLogout" styleClass="button,danger-button" text="Logout"/>
+      <Button onAction="#showFlowers" styleClass="button,secondary-button" text="Квіти" fx:id="flowersTabButton"/>
+      <Button onAction="#showBouquets" styleClass="button,secondary-button" text="Букети" fx:id="bouquetsTabButton"/>
+      <Button onAction="#showAccessories" styleClass="button,secondary-button" text="Аксесуари" fx:id="accessoriesTabButton"/>
+      <Button onAction="#showUsers" styleClass="button,secondary-button" text="Користувачі" fx:id="usersTabButton"/>
+      <Button onAction="#showOrders" styleClass="button,secondary-button" text="Замовлення" fx:id="ordersTabButton"/>
+      <Button onAction="#handleLogout" styleClass="button,danger-button" text="Вийти з акаунту"/>
       <Pane HBox.hgrow="ALWAYS"/>
     </ToolBar>
   </top>
