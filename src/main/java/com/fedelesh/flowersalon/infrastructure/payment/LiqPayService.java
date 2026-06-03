@@ -12,8 +12,8 @@ import org.json.JSONObject;
 public class LiqPayService {
 
   private static final String CHECKOUT_URL = "https://www.liqpay.ua/api/3/checkout";
-  private static final String PUBLIC_KEY = "sandbox_i31343787867";
-  private static final String PRIVATE_KEY = "sandbox_H4yTYaNjj7tV9fGFQOBtxeOgywgxLGGgJjchdYna";
+  private static final String PUBLIC_KEY = "";
+  private static final String PRIVATE_KEY = "";
 
   public String generatePaymentUrl(BigDecimal amount, String description, String orderId) {
     try {
