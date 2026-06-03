@@ -25,7 +25,7 @@ public class SmtpEmailSender implements EmailSender {
             new Authenticator() {
               protected PasswordAuthentication getPasswordAuthentication() {
                 return new PasswordAuthentication(
-                    "andrey.fedelesh12@gmail.com", "wmtfvxgddxxahhbj");
+                    "", "");
               }
             });
 
